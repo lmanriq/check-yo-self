@@ -6,11 +6,23 @@
 }
 
 /* LAYOUT  */
+
+body {
+  font-weight: 400;
+}
+
+main {
+  height: 53em;
+}
+
 main,
 header,
 .task-list-column,
 .card-footer,
-.search-box {
+.search-box,
+.task-item-wrap,
+.check-pair,
+.task-lists-column {
   display: flex;
 }
 
@@ -51,10 +63,6 @@ header {
   padding: 0 0.2em;
 }
 
-body {
-  font-weight: 400;
-}
-
 .yo {
   color: #ffc30c;
 }
@@ -64,20 +72,53 @@ body {
   width: 25%;
 }
 
-label {
+.form-box,
+.filter-box {
+  padding: 1em;
+}
+
+.filter-box {
+  border-top: 2px solid #1f1f3d;
+  padding-top: 1.5em;
+}
+
+label,
+.task-buttons {
   display: block;
 }
 
+.task-input,
+.task-buttons {
+  height: 2.5em;
+}
+
+.task-input,
+.task-item-wrap,
 .task-buttons {
   width: 90%;
-  display: block;
+  margin-bottom: 1em;
+}
+
+.task-item-wrap {
+  height: 1.8em;
+}
+
+.item-input {
+  width: 100%;
+}
+
+.add-button {
+  width: 15%;
+  font-size: 1em;
 }
 
 /* TASK LIST SECTION */
 
-.task-list-column {
+.task-lists-column {
   background-color: #f3f6f7;
   width: 75%;
+  flex-flow: column wrap;
+  align-items: flex-start;
 }
 
 .task-card {
@@ -94,8 +135,22 @@ label {
   border-bottom: 2px solid #c7d3d8;
 }
 
-input[type="checkbox"] {
+.check-pair p {
   display: inline-block;
+}
+
+h2,
+.card-footer {
+  padding: 0.5em;
+}
+
+h2 {
+  font-size: 1.2em;
+}
+
+.check-pair {
+  justify-content: space-around;
+  margin: 1em;
 }
 
 .card-footer {
