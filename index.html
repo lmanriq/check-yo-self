@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Check Yo' Self</title>
+  </head>
+  <body>
+    <header>
+      <h1>CHECK YO' SELF</h1>
+    </header>
+    <div class="search-div">
+      <img src="assets/search.svg" alt="search icon"><input type="text" name="search" placeholder="search">
+    </div>
+    <main>
+      <div class="task-column">
+        <div class="form-box">
+          <form class="task-input-box" action="index.html" method="post">
+            <label for="task-title-input">Task Title</label>
+            <input id="task-title-input" class="task-input" type="text">
+            <label for="task-item-input">Task Item</label>
+            <input id="task-item-input" type="text">
+            <button class="add-button" type="button">+</button>
+            <button id="make-task-list-btn" class="task-buttons" type="button">Make Task List</button>
+            <button id="clear-all-btn" class="task-buttons" type="button">Clear All</button>
+          </form>
+        </div>
+        <div class="filter-box">
+          <button class="task-buttons" type="button"></button>
+        </div>
+      </div>
+      <div class="task-lists-column">
+        <div class="task-list-card urgent">
+          <h2 class="card-title">Task Title</h2>
+          <div class="card-list-box">
+            <input type="checkbox" checked="checked"><p>Blah blah blah</p>
+            <input type="checkbox" checked=""><p>Blah blah</p>
+            <input type="checkbox" checked=""><p>Blah blah blah Blah</p>
+          </div>
+          <div class="card-footer">
+            <div class="urgent-box">
+              <img src="assets/urgent-active.svg" alt="urgent icon">
+              <p>URGENT</p>
+            </div>
+            <div class="delete-box">
+              <img class="delete" src="assets/delete.svg" alt="delete button">
+              <p>DELETE</p>
+            </div>
+          </div>
+        </div>
+        <div class="task-card">
+          <h2 class="card-title">Task Title</h2>
+          <div class="card-list-box">
+            <input type="checkbox" checked="checked"><p>Blah blah blah</p>
+            <input type="checkbox" checked=""><p>Blah blah</p>
+            <input type="checkbox" checked=""><p>Blah blah blah Blah</p>
+          </div>
+          <div class="card-footer">
+            <div class="urgent-box">
+              <img src="assets/urgent.svg" alt="urgent icon">
+              <p>URGENT</p>
+            </div>
+            <div class="delete-box">
+              <img class="delete" src="assets/delete.svg" alt="delete button">
+              <p>DELETE</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+  <script type="text/javascript" src="task.js"></script>
+  <script type="text/javascript" src="todo-list.js"></script>
+  <script type="text/javascript" src="main.js"></script>
+</html>
