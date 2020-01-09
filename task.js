@@ -5,5 +5,7 @@ class Task = {
     this.completed = false;
   }
 
-  
+  markCompleted() {
+    this.completed = true;
+  }
 }
