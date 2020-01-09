@@ -19,7 +19,12 @@ class ToDoList {
     this.urgent = urgency;
   }
 
-  updateTask() {
-
+  updateTask(id, content, completed) {
+    this.tasks.forEach(function(task) {
+      if (task.id === id) {
+        task.content = content;
+        task.completed = true;
+      }
+    })
   }
 }
