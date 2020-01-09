@@ -3,14 +3,15 @@
   <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Check Yo' Self</title>
   </head>
   <body>
     <header>
       <h1>CHECK <span class="yo">YO'</span> SELF</h1>
-      <div class="search-div">
-        <img src="assets/search.svg" alt="search icon"><input type="text" name="search" placeholder="search">
+      <div class="search-box">
+        <img class="search-icon" src="assets/search.svg" alt="search icon"><input type="text" name="search" placeholder="search">
       </div>
     </header>
     <main>
@@ -20,23 +21,31 @@
             <label for="task-title-input">Task Title</label>
             <input id="task-title-input" class="task-input" type="text">
             <label for="task-item-input">Task Item</label>
-            <input id="task-item-input" type="text">
-            <button class="add-button" type="button">+</button>
+            <div class="task-item-wrap">
+              <input id="task-item-input" class="item-input" type="text">
+              <button class="add-button" type="button">+</button>
+            </div>
             <button id="make-task-list-btn" class="task-buttons" type="button">Make Task List</button>
             <button id="clear-all-btn" class="task-buttons" type="button">Clear All</button>
           </form>
         </div>
         <div class="filter-box">
-          <button class="task-buttons" type="button"></button>
+          <button class="task-buttons" type="button">Filter by Urgency</button>
         </div>
       </div>
       <div class="task-lists-column">
-        <div class="task-list-card urgent">
+        <div class="task-card urgent">
           <h2 class="card-title">Task Title</h2>
           <div class="card-list-box">
-            <input type="checkbox" checked="checked"><p>Blah blah blah</p>
-            <input type="checkbox" checked=""><p>Blah blah</p>
-            <input type="checkbox" checked=""><p>Blah blah blah Blah</p>
+            <div class="check-pair">
+              <input type="checkbox" checked="checked"><p>Blah blah blah</p>
+            </div>
+            <div class="check-pair">
+              <input type="checkbox"><p>Blah blah blah</p>
+            </div>
+            <div class="check-pair">
+              <input type="checkbox"><p>Blah blah blah</p>
+            </div>
           </div>
           <div class="card-footer">
             <div class="urgent-box">
@@ -52,9 +61,15 @@
         <div class="task-card">
           <h2 class="card-title">Task Title</h2>
           <div class="card-list-box">
-            <input type="checkbox" checked="checked"><p>Blah blah blah</p>
-            <input type="checkbox" checked=""><p>Blah blah</p>
-            <input type="checkbox" checked=""><p>Blah blah blah Blah</p>
+            <div class="check-pair">
+              <input type="checkbox" checked="checked"><p>Blah blah blah</p>
+            </div>
+            <div class="check-pair">
+              <input type="checkbox"><p>Blah blah blah</p>
+            </div>
+            <div class="check-pair">
+              <input type="checkbox"><p>Blah blah blah</p>
+            </div>
           </div>
           <div class="card-footer">
             <div class="urgent-box">
