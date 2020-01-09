@@ -1,0 +1,174 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Open Sans', sans-serif;
+}
+
+/* LAYOUT  */
+
+body {
+  font-weight: 400;
+}
+
+main {
+  height: 53em;
+}
+
+main,
+header,
+.task-list-column,
+.card-footer,
+.search-box,
+.task-item-wrap,
+.check-pair,
+.task-lists-column {
+  display: flex;
+}
+
+img {
+  height: 1em;
+}
+
+header,
+button {
+  background-color: #1f1f3d;
+  color: #fff;
+}
+
+header {
+  width: 100%;
+  justify-content: space-between;
+  font-weight: 800;
+  font-size: 1.3em;
+  align-items: center;
+  padding: 0.5em 3em 0.5em 1em;
+}
+
+.search-box {
+  background-color: #c7d3d8;
+  height: 1.3em;
+  align-items: center;
+  width: 10em;
+}
+
+.search-box input {
+  height: 100%;
+  width: 100%;
+  padding-left: 0.5em;
+}
+
+.search-icon {
+  height: 0.8em;
+  padding: 0 0.2em;
+}
+
+.yo {
+  color: #ffc30c;
+}
+
+.task-add-column {
+  background-color: #587a8a;
+  width: 25%;
+}
+
+.form-box,
+.filter-box {
+  padding: 1em;
+}
+
+.filter-box {
+  border-top: 2px solid #1f1f3d;
+  padding-top: 1.5em;
+}
+
+label,
+.task-buttons {
+  display: block;
+}
+
+.task-input,
+.task-buttons {
+  height: 2.5em;
+}
+
+.task-input,
+.task-item-wrap,
+.task-buttons {
+  width: 90%;
+  margin-bottom: 1em;
+}
+
+.task-item-wrap {
+  height: 1.8em;
+}
+
+.item-input {
+  width: 100%;
+}
+
+.add-button {
+  width: 15%;
+  font-size: 1em;
+}
+
+/* TASK LIST SECTION */
+
+.task-lists-column {
+  background-color: #f3f6f7;
+  width: 75%;
+  flex-flow: column wrap;
+  align-items: flex-start;
+}
+
+.task-card {
+  background-color: #fafdff;
+  border: 2px solid #c7d3d8;
+  color: #1f1f3d;
+  width: 15em;
+  height: auto;
+  margin: 1em;
+}
+
+.card-list-box {
+  border-top: 2px solid #c7d3d8;
+  border-bottom: 2px solid #c7d3d8;
+}
+
+.check-pair p {
+  display: inline-block;
+}
+
+h2,
+.card-footer {
+  padding: 0.5em;
+}
+
+h2 {
+  font-size: 1.2em;
+}
+
+.check-pair {
+  justify-content: space-around;
+  margin: 1em;
+}
+
+.card-footer {
+  color: #3c6577;
+  justify-content: space-between;
+}
+
+.urgent-box,
+.delete-box {
+  text-align: center;
+}
+
+.urgent {
+  background-color: #ffe89d;
+  border: 2px solid #ffc30c;
+}
+
+.urgent .card-list-box {
+  border-top: 2px solid #ffc30c;
+  border-bottom: 2px solid #ffc30c;
+}
