@@ -13,7 +13,20 @@
     </div>
     <main>
       <div class="task-column">
-        <h2></h2>
+        <div class="form-box">
+          <form class="task-input-box" action="index.html" method="post">
+            <label for="task-title-input">Task Title</label>
+            <input id="task-title-input" class="task-input" type="text">
+            <label for="task-item-input">Task Item</label>
+            <input id="task-item-input" type="text">
+            <button class="add-button" type="button">+</button>
+            <button id="make-task-list-btn" class="task-buttons" type="button">Make Task List</button>
+            <button id="clear-all-btn" class="task-buttons" type="button">Clear All</button>
+          </form>
+        </div>
+        <div class="filter-box">
+          <button class="task-buttons" type="button"></button>
+        </div>
       </div>
       <div class="task-box">
 
