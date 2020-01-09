@@ -2,12 +2,19 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-family: 'Open Sans', sans-serif;
 }
 
 /* LAYOUT  */
+main,
+header,
+.task-list-column,
+.card-footer {
+  display: flex;
+}
 
 img {
-  height: 0.5em;
+  height: 1em;
 }
 
 header,
@@ -16,29 +23,74 @@ button {
   color: #fff;
 }
 
+header {
+  width: 100%;
+  justify-content: space-between;
+  font-weight: 800;
+}
+
+body {
+  font-weight: 400;
+}
+
 .yo {
   color: #ffc30c;
 }
 
 .task-add-column {
   background-color: #587a8a;
+  width: 25%;
 }
+
+label {
+  display: block;
+}
+
+.task-buttons {
+  width: 90%;
+  display: block;
+}
+
+/* TASK LIST SECTION */
 
 .task-list-column {
   background-color: #f3f6f7;
+  width: 75%;
 }
 
-.task-list-card {
+.task-card {
   background-color: #fafdff;
   border: 2px solid #c7d3d8;
-  color: #1f1f3d
+  color: #1f1f3d;
+  width: 15em;
+  height: auto;
+}
+
+.card-list-box {
+  border-top: 2px solid #c7d3d8;
+  border-bottom: 2px solid #c7d3d8;
+}
+
+input[type="checkbox"] {
+  display: inline-block;
 }
 
 .card-footer {
   color: #3c6577;
+  justify-content: space-between;
+}
+
+.urgent-box,
+.delete-box {
+  text-align: center;
 }
 
 .urgent {
   background-color: #ffe89d;
   border: 2px solid #ffc30c;
+}
+
+.urgent .card-list-box {
+  border-top: 2px solid #ffc30c;
+  border-bottom: 2px solid #ffc30c;
 }
