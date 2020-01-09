@@ -9,7 +9,8 @@
 main,
 header,
 .task-list-column,
-.card-footer {
+.card-footer,
+.search-box {
   display: flex;
 }
 
@@ -27,6 +28,27 @@ header {
   width: 100%;
   justify-content: space-between;
   font-weight: 800;
+  font-size: 1.3em;
+  align-items: center;
+  padding: 0.5em 3em 0.5em 1em;
+}
+
+.search-box {
+  background-color: #c7d3d8;
+  height: 1.3em;
+  align-items: center;
+  width: 10em;
+}
+
+.search-box input {
+  height: 100%;
+  width: 100%;
+  padding-left: 0.5em;
+}
+
+.search-icon {
+  height: 0.8em;
+  padding: 0 0.2em;
 }
 
 body {
@@ -64,6 +86,7 @@ label {
   color: #1f1f3d;
   width: 15em;
   height: auto;
+  margin: 1em;
 }
 
 .card-list-box {
