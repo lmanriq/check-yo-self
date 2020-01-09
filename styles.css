@@ -1,0 +1,44 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* LAYOUT  */
+
+img {
+  height: 0.5em;
+}
+
+header,
+button {
+  background-color: #1f1f3d;
+  color: #fff;
+}
+
+.yo {
+  color: #ffc30c;
+}
+
+.task-add-column {
+  background-color: #587a8a;
+}
+
+.task-list-column {
+  background-color: #f3f6f7;
+}
+
+.task-list-card {
+  background-color: #fafdff;
+  border: 2px solid #c7d3d8;
+  color: #1f1f3d
+}
+
+.card-footer {
+  color: #3c6577;
+}
+
+.urgent {
+  background-color: #ffe89d;
+  border: 2px solid #ffc30c;
+}
