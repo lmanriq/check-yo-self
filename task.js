@@ -1,4 +1,4 @@
-class Task = {
+class Task {
   constructor (id) {
     this.id = id;
     this.title = '';

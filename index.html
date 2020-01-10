@@ -20,10 +20,15 @@
           <form class="task-input-box" action="index.html" method="post">
             <label for="task-title-input">Task Title</label>
             <input id="task-title-input" class="task-input" type="text">
+            <div class="task-item-box">
+              <div class="item">
+                <img src="assets/delete.svg" alt="delete icon"><p>Blah blah blah</p>
+              </div>
+            </div>
             <label for="task-item-input">Task Item</label>
             <div class="task-item-wrap">
               <input id="task-item-input" class="item-input" type="text">
-              <button class="add-button" type="button">+</button>
+              <button id="add-task-btn" class="add-button" type="button">+</button>
             </div>
             <button id="make-task-list-btn" class="task-buttons" type="button">Make Task List</button>
             <button id="clear-all-btn" class="task-buttons" type="button">Clear All</button>
@@ -34,7 +39,8 @@
         </div>
       </div>
       <div class="task-lists-column">
-        <div class="task-card urgent">
+        <h3>No tasks yet! Create a new task list to get started.</h3>
+        <!-- <div class="task-card urgent">
           <h2 class="card-title">Task Title</h2>
           <div class="card-list-box">
             <div class="check-pair">
@@ -81,7 +87,7 @@
               <p>DELETE</p>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </main>
   </body>

@@ -22,7 +22,8 @@ header,
 .search-box,
 .task-item-wrap,
 .check-pair,
-.task-lists-column {
+.task-lists-column,
+.item {
   display: flex;
 }
 
@@ -99,6 +100,15 @@ label,
   margin-bottom: 1em;
 }
 
+.item {
+  padding-bottom: 0.5em;
+  align-items: center;
+}
+
+.item img {
+  margin-right: 0.5em;
+}
+
 .task-item-wrap {
   height: 1.8em;
 }
@@ -113,6 +123,10 @@ label,
 }
 
 /* TASK LIST SECTION */
+
+h3 {
+  padding: 1em;
+}
 
 .task-lists-column {
   background-color: #f3f6f7;
