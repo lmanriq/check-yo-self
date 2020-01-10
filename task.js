@@ -1,7 +1,8 @@
 class Task {
-  constructor (content) {
+  constructor (id, content, completed) {
+    this.id = id;
     this.content = content;
-    this.completed = false;
+    this.completed = completed;
   }
 
   markCompleted() {
