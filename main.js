@@ -19,6 +19,7 @@ taskItemBox.addEventListener('click', function() {
 taskItemInput.addEventListener('keyup', activatePlusBtn)
 taskListBtn.addEventListener('click', function() {
   addTaskCard();
+  addTasksToStorage();
 });
 taskForm.addEventListener('keyup', enableClearBtn)
 clearAllBtn.addEventListener('click', clearForm)
@@ -52,16 +53,20 @@ function addTaskCard() {
   noTasksMsg.remove();
   var allTasks = document.querySelectorAll('.task-p');
   var checklistHTML = '';
-  var taskItems = [];
-  var taskTitle = taskTitleInput.value;
   allTasks.forEach(function(task){
     checklistHTML += `<div class="check-pair">
       <input type="checkbox"><p>${task.innerText}</p>
     </div>`;
-    taskItems.push(new Task(task.innerText));
-  })
+  });
+  var taskCard = makeTaskCard(taskTitleInput.value, checklistHTML);
+  tasksListsSection.insertAdjacentHTML('afterbegin', taskCard);
+}
+
+addTasksOnLoad();
+
+function makeTaskCard(title, checklistHTML) {
   var taskCard = `<div class="task-card">
-    <h2 class="card-title">${taskTitle}</h2>
+    <h2 class="card-title">${title}</h2>
     <div class="card-list-box">
     ${checklistHTML}
     </div>
@@ -76,9 +81,35 @@ function addTaskCard() {
       </div>
     </div>
   </div>`
-  tasksListsSection.insertAdjacentHTML('afterbegin', taskCard);
+  return taskCard;
+}
+
+function addTasksOnLoad() {
+  if (localStorage.getItem('task lists')) {
+    noTasksMsg.remove();
+    taskLists = JSON.parse(localStorage.getItem('task lists'));
+    taskLists.forEach(function(taskList) {
+      var checklistHTML = '';
+      var taskItems = taskList.tasks;
+      taskItems.forEach(function(task) {
+        checklistHTML += `<div class="check-pair">
+          <input type="checkbox"><p>${task.content}</p>
+        </div>`;
+      })
+      var taskCard = makeTaskCard(taskList.title, checklistHTML);
+      tasksListsSection.insertAdjacentHTML('afterbegin', taskCard);
+    })
+  }
+}
+
+function addTasksToStorage() {
+  var taskItems = [];
+  var allTasks = document.querySelectorAll('.task-p');
   var id = new Date().valueOf();
-  var toDo = new ToDoList(id, taskTitle);
+  var toDo = new ToDoList(id, taskTitleInput.value);
+  allTasks.forEach(function(task){
+    taskItems.push(new Task(task.innerText));
+  })
   toDo.tasks = taskItems;
   toDo.saveToStorage();
 }
