@@ -6,6 +6,7 @@ var taskForm = document.querySelector('form');
 var taskListBtn = document.getElementById('make-task-list-btn');
 var noTasksMsg = document.getElementById('no-tasks-msg');
 var tasksListsSection = document.querySelector('.task-lists-column');
+var clearAllBtn = document.getElementById('clear-all-btn')
 
 plusBtn.addEventListener('click', function() {
   addTaskItem();
@@ -18,9 +19,20 @@ taskItemInput.addEventListener('keyup', activatePlusBtn)
 taskListBtn.addEventListener('click', function() {
   addTaskCard();
 });
-// taskForm.addEventListener('keyup', enableTaskListBtn)
+taskForm.addEventListener('keyup', enableClearBtn)
+clearAllBtn.addEventListener('click', clearForm)
 
 disableAllButtons();
+
+function clearForm() {
+  taskForm.reset();
+}
+
+function enableClearBtn() {
+  if (taskTitleInput.value || taskItemInput.value) {
+    clearAllBtn.disabled = false;
+  }
+}
 
 function enableTaskListBtn() {
   if (taskTitleInput.value && taskItemBox.hasChildNodes()) {
