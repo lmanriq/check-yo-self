@@ -22,7 +22,8 @@ header,
 .search-box,
 .task-item-wrap,
 .check-pair,
-.task-lists-column {
+.task-lists-column,
+.item {
   display: flex;
 }
 
@@ -97,6 +98,15 @@ label,
 .task-buttons {
   width: 90%;
   margin-bottom: 1em;
+}
+
+.item {
+  padding-bottom: 0.5em;
+  align-items: center;
+}
+
+.item img {
+  margin-right: 0.5em;
 }
 
 .task-item-wrap {
