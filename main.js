@@ -3,16 +3,20 @@ var taskItemInput = document.getElementById('task-item-input');
 var plusButton = document.getElementById('add-task-btn');
 
 plusButton.addEventListener('click', addTaskItem)
-taskItemBox.addEventListener('click', deleteTaskItem)
+taskItemBox.addEventListener('click', function() {
+  deleteTaskItem(event)
+})
 
 function addTaskItem() {
   var taskItemHTML = `<div class="item">
-    <img src="assets/delete.svg" alt="delete icon"><p>${taskItemInput.value}</p>
+    <img class="delete" src="assets/delete.svg" alt="delete icon"><p>${taskItemInput.value}</p>
   </div>`
   taskItemBox.insertAdjacentHTML('beforeend', taskItemHTML);
   taskItemInput.value = '';
 }
 
-function deleteTaskItem() {
-
+function deleteTaskItem(event) {
+  if (event.target.classList.contains('delete')) {
+    event.target.parentNode.remove();
+  }
 }
