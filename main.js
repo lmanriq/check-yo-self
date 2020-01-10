@@ -11,21 +11,42 @@ var taskLists = [];
 
 tasksListsSection.addEventListener('click', function() {
   changeCheckedStatus();
+  addTaskListsToStorage()
 })
+
+function checkIfChecked() {
+  var allCheckBoxes = document.querySelectorAll('input[type="checkbox"]');
+  allCheckBoxes.forEach(function(checkBox) {
+    if (checkBox.checked == true) {
+      console.log('hi')
+      checkBox.disabled = true;
+    }
+  })
+}
+
+function addTaskListsToStorage() {
+  localStorage.setItem('task lists', JSON.stringify(taskLists));
+}
 
 function changeCheckedStatus() {
   if (event.target.classList.contains('checkbox')) {
     console.log(event.target.id);
+    // var newTasksList;
     taskLists.forEach(function(taskList) {
       taskList.tasks.forEach(function(task) {
         if (event.target.id === task.id) {
           task.completed = true;
         }
-      })
-      taskList.saveToStorage();
-    })
-    event.target.disabled = true;
 
+      })
+      //The checked status is working, but if I use the code below, I get duplicates
+      //of all of my cards
+      // taskList.saveToStorage();
+    })
+    // taskLists = newTasksList;
+    //taskLists.push(this);
+    // window.localStorage.setItem('task lists', JSON.stringify(taskLists));
+    event.target.disabled = true;
   }
 }
 
@@ -109,6 +130,7 @@ function addTasksOnLoad() {
     noTasksMsg.remove();
     taskLists = JSON.parse(localStorage.getItem('task lists'));
     taskLists.forEach(function(taskList) {
+      //Reassign each task list to get its methods back
       var listId = taskList.id;
       var listTasks = taskList.tasks;
       taskList = new ToDoList(listId, taskList.title, listTasks);
@@ -131,6 +153,7 @@ function addTasksOnLoad() {
       })
       var taskCard = makeTaskCard(taskList.title, checklistHTML);
       tasksListsSection.insertAdjacentHTML('afterbegin', taskCard);
+      checkIfChecked();
     })
   }
 }
@@ -139,12 +162,11 @@ function addTasksToStorage() {
   var taskItems = [];
   var allTasks = document.querySelectorAll('.task-p');
   var id = new Date().valueOf();
-  var toDo = new ToDoList(id, taskTitleInput.value);
   allTasks.forEach(function(task){
     id += 'a';
     taskItems.push(new Task(id, task.innerText, false));
   })
-  toDo.tasks = taskItems;
+  var toDo = new ToDoList(id, taskTitleInput.value, taskItems);
   toDo.saveToStorage();
 }
 
