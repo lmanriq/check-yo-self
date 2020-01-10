@@ -1,5 +1,6 @@
 var taskItemBox = document.querySelector('.task-item-box');
 var taskItemInput = document.getElementById('task-item-input');
+var taskTitleInput = document.getElementById('task-title-input')
 var plusBtn = document.getElementById('add-task-btn');
 var taskForm = document.querySelector('form');
 var taskListBtn = document.getElementById('make-task-list-btn');
@@ -16,18 +17,18 @@ taskListBtn.addEventListener('click', addTaskCard)
 activatePlusBtn();
 
 function addTaskCard() {
+  noTasksMsg.remove();
+  var allTasks = document.querySelectorAll('.task-p');
+  var checklistHTML = '';
+  allTasks.forEach(function(task){
+    checklistHTML += `<div class="check-pair">
+      <input type="checkbox"><p>${task.innerText}</p>
+    </div>`;
+  })
   var taskCard = `<div class="task-card">
-    <h2 class="card-title">${}</h2>
+    <h2 class="card-title">${taskTitleInput.value}</h2>
     <div class="card-list-box">
-      <div class="check-pair">
-        <input type="checkbox" checked="checked"><p>Blah blah blah</p>
-      </div>
-      <div class="check-pair">
-        <input type="checkbox"><p>Blah blah blah</p>
-      </div>
-      <div class="check-pair">
-        <input type="checkbox"><p>Blah blah blah</p>
-      </div>
+    ${checklistHTML}
     </div>
     <div class="card-footer">
       <div class="urgent-box">
@@ -40,7 +41,6 @@ function addTaskCard() {
       </div>
     </div>
   </div>`
-  noTasksMsg.remove();
   tasksListsSection.insertAdjacentHTML('afterbegin', taskCard)
 }
 
@@ -54,7 +54,7 @@ function activatePlusBtn() {
 
 function addTaskItem() {
   var taskItemHTML = `<div class="item">
-    <img class="delete" src="assets/delete.svg" alt="delete icon"><p>${taskItemInput.value}</p>
+    <img class="delete" src="assets/delete.svg" alt="delete icon"><p class="task-p">${taskItemInput.value}</p>
   </div>`
   taskItemBox.insertAdjacentHTML('beforeend', taskItemHTML);
   taskItemInput.value = '';
