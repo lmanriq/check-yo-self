@@ -1,17 +1,19 @@
 class ToDoList {
-  constructor(id) {
+  constructor(id, title) {
     this.id = id;
-    this.title = '';
+    this.title = title;
     this.urgent = false;
     this.tasks = [];
   }
 
   saveToStorage() {
-    window.localStorage.setItem(this);
+    taskLists.push(this);
+    window.localStorage.setItem('task lists', JSON.stringify(taskLists));
   }
 
   deleteFromStorage() {
-    window.localStorage.removeItem(this);
+    taskLists.splice(taskLists.indexOf(this), 1)
+    window.localStorage.setItem('task lists', JSON.stringify(taskLists));
   }
 
   updateToDo(newTitle, urgency) {
