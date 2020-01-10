@@ -9,6 +9,47 @@ var tasksListsSection = document.querySelector('.task-lists-column');
 var clearAllBtn = document.getElementById('clear-all-btn');
 var taskLists = [];
 
+tasksListsSection.addEventListener('click', function() {
+  changeCheckedStatus();
+  addTaskListsToStorage()
+})
+
+function checkIfChecked() {
+  var allCheckBoxes = document.querySelectorAll('input[type="checkbox"]');
+  allCheckBoxes.forEach(function(checkBox) {
+    if (checkBox.checked == true) {
+      console.log('hi')
+      checkBox.disabled = true;
+    }
+  })
+}
+
+function addTaskListsToStorage() {
+  localStorage.setItem('task lists', JSON.stringify(taskLists));
+}
+
+function changeCheckedStatus() {
+  if (event.target.classList.contains('checkbox')) {
+    console.log(event.target.id);
+    // var newTasksList;
+    taskLists.forEach(function(taskList) {
+      taskList.tasks.forEach(function(task) {
+        if (event.target.id === task.id) {
+          task.completed = true;
+        }
+
+      })
+      //The checked status is working, but if I use the code below, I get duplicates
+      //of all of my cards
+      // taskList.saveToStorage();
+    })
+    // taskLists = newTasksList;
+    //taskLists.push(this);
+    // window.localStorage.setItem('task lists', JSON.stringify(taskLists));
+    event.target.disabled = true;
+  }
+}
+
 plusBtn.addEventListener('click', function() {
   addTaskItem();
   enableTaskListBtn();
@@ -19,6 +60,7 @@ taskItemBox.addEventListener('click', function() {
 taskItemInput.addEventListener('keyup', activatePlusBtn)
 taskListBtn.addEventListener('click', function() {
   addTaskCard();
+  addTasksToStorage();
 });
 taskForm.addEventListener('keyup', enableClearBtn)
 clearAllBtn.addEventListener('click', clearForm)
@@ -52,16 +94,20 @@ function addTaskCard() {
   noTasksMsg.remove();
   var allTasks = document.querySelectorAll('.task-p');
   var checklistHTML = '';
-  var taskItems = [];
-  var taskTitle = taskTitleInput.value;
   allTasks.forEach(function(task){
     checklistHTML += `<div class="check-pair">
-      <input type="checkbox"><p>${task.innerText}</p>
+      <input class="checkbox" type="checkbox"><p>${task.innerText}</p>
     </div>`;
-    taskItems.push(new Task(task.innerText));
-  })
+  });
+  var taskCard = makeTaskCard(taskTitleInput.value, checklistHTML);
+  tasksListsSection.insertAdjacentHTML('afterbegin', taskCard);
+}
+
+addTasksOnLoad();
+
+function makeTaskCard(title, checklistHTML) {
   var taskCard = `<div class="task-card">
-    <h2 class="card-title">${taskTitle}</h2>
+    <h2 class="card-title">${title}</h2>
     <div class="card-list-box">
     ${checklistHTML}
     </div>
@@ -76,10 +122,51 @@ function addTaskCard() {
       </div>
     </div>
   </div>`
-  tasksListsSection.insertAdjacentHTML('afterbegin', taskCard);
+  return taskCard;
+}
+
+function addTasksOnLoad() {
+  if (localStorage.getItem('task lists')) {
+    noTasksMsg.remove();
+    taskLists = JSON.parse(localStorage.getItem('task lists'));
+    taskLists.forEach(function(taskList) {
+      //Reassign each task list to get its methods back
+      var listId = taskList.id;
+      var listTasks = taskList.tasks;
+      taskList = new ToDoList(listId, taskList.title, listTasks);
+    })
+    taskLists.forEach(function(taskList) {
+      var checklistHTML = '';
+      var taskItems = taskList.tasks;
+      taskItems.forEach(function(task) {
+        //replace existing tasks with newly instantiated tasks
+        //Give input an ID that matches ID of input
+        var taskId = task.id;
+        task = new Task(taskId, task.content, task.completed);
+        var checkedStatus = '';
+        if (task.completed === true) {
+          checkedStatus = `checked="checked"`
+        }
+        checklistHTML += `<div class="check-pair">
+          <input id=${taskId} class="checkbox" type="checkbox" ${checkedStatus}><p>${task.content}</p>
+        </div>`;
+      })
+      var taskCard = makeTaskCard(taskList.title, checklistHTML);
+      tasksListsSection.insertAdjacentHTML('afterbegin', taskCard);
+      checkIfChecked();
+    })
+  }
+}
+
+function addTasksToStorage() {
+  var taskItems = [];
+  var allTasks = document.querySelectorAll('.task-p');
   var id = new Date().valueOf();
-  var toDo = new ToDoList(id, taskTitle);
-  toDo.tasks = taskItems;
+  allTasks.forEach(function(task){
+    id += 'a';
+    taskItems.push(new Task(id, task.innerText, false));
+  })
+  var toDo = new ToDoList(id, taskTitleInput.value, taskItems);
   toDo.saveToStorage();
 }
 
