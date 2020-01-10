@@ -9,6 +9,26 @@ var tasksListsSection = document.querySelector('.task-lists-column');
 var clearAllBtn = document.getElementById('clear-all-btn');
 var taskLists = [];
 
+tasksListsSection.addEventListener('click', function() {
+  changeCheckedStatus();
+})
+
+function changeCheckedStatus() {
+  if (event.target.classList.contains('checkbox')) {
+    console.log(event.target.id);
+    taskLists.forEach(function(taskList) {
+      taskList.tasks.forEach(function(task) {
+        if (event.target.id === task.id) {
+          task.completed = true;
+        }
+      })
+      taskList.saveToStorage();
+    })
+    event.target.disabled = true;
+
+  }
+}
+
 plusBtn.addEventListener('click', function() {
   addTaskItem();
   enableTaskListBtn();
@@ -55,7 +75,7 @@ function addTaskCard() {
   var checklistHTML = '';
   allTasks.forEach(function(task){
     checklistHTML += `<div class="check-pair">
-      <input type="checkbox"><p>${task.innerText}</p>
+      <input class="checkbox" type="checkbox"><p>${task.innerText}</p>
     </div>`;
   });
   var taskCard = makeTaskCard(taskTitleInput.value, checklistHTML);
@@ -89,11 +109,24 @@ function addTasksOnLoad() {
     noTasksMsg.remove();
     taskLists = JSON.parse(localStorage.getItem('task lists'));
     taskLists.forEach(function(taskList) {
+      var listId = taskList.id;
+      var listTasks = taskList.tasks;
+      taskList = new ToDoList(listId, taskList.title, listTasks);
+    })
+    taskLists.forEach(function(taskList) {
       var checklistHTML = '';
       var taskItems = taskList.tasks;
       taskItems.forEach(function(task) {
+        //replace existing tasks with newly instantiated tasks
+        //Give input an ID that matches ID of input
+        var taskId = task.id;
+        task = new Task(taskId, task.content, task.completed);
+        var checkedStatus = '';
+        if (task.completed === true) {
+          checkedStatus = `checked="checked"`
+        }
         checklistHTML += `<div class="check-pair">
-          <input type="checkbox"><p>${task.content}</p>
+          <input id=${taskId} class="checkbox" type="checkbox" ${checkedStatus}><p>${task.content}</p>
         </div>`;
       })
       var taskCard = makeTaskCard(taskList.title, checklistHTML);
@@ -108,7 +141,8 @@ function addTasksToStorage() {
   var id = new Date().valueOf();
   var toDo = new ToDoList(id, taskTitleInput.value);
   allTasks.forEach(function(task){
-    taskItems.push(new Task(task.innerText));
+    id += 'a';
+    taskItems.push(new Task(id, task.innerText, false));
   })
   toDo.tasks = taskItems;
   toDo.saveToStorage();
