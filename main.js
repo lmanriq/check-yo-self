@@ -6,7 +6,8 @@ var taskForm = document.querySelector('form');
 var taskListBtn = document.getElementById('make-task-list-btn');
 var noTasksMsg = document.getElementById('no-tasks-msg');
 var tasksListsSection = document.querySelector('.task-lists-column');
-var clearAllBtn = document.getElementById('clear-all-btn')
+var clearAllBtn = document.getElementById('clear-all-btn');
+var taskLists = [];
 
 plusBtn.addEventListener('click', function() {
   addTaskItem();
@@ -51,13 +52,16 @@ function addTaskCard() {
   noTasksMsg.remove();
   var allTasks = document.querySelectorAll('.task-p');
   var checklistHTML = '';
+  var taskItems = [];
+  var taskTitle = taskTitleInput.value;
   allTasks.forEach(function(task){
     checklistHTML += `<div class="check-pair">
       <input type="checkbox"><p>${task.innerText}</p>
     </div>`;
+    taskItems.push(new Task(task.innerText));
   })
   var taskCard = `<div class="task-card">
-    <h2 class="card-title">${taskTitleInput.value}</h2>
+    <h2 class="card-title">${taskTitle}</h2>
     <div class="card-list-box">
     ${checklistHTML}
     </div>
@@ -72,7 +76,11 @@ function addTaskCard() {
       </div>
     </div>
   </div>`
-  tasksListsSection.insertAdjacentHTML('afterbegin', taskCard)
+  tasksListsSection.insertAdjacentHTML('afterbegin', taskCard);
+  var id = new Date().valueOf();
+  var toDo = new ToDoList(id, taskTitle);
+  toDo.tasks = taskItems;
+  toDo.saveToStorage();
 }
 
 function activatePlusBtn() {
