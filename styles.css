@@ -114,6 +114,10 @@ label,
 
 /* TASK LIST SECTION */
 
+h3 {
+  padding: 1em;
+}
+
 .task-lists-column {
   background-color: #f3f6f7;
   width: 75%;
