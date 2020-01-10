@@ -7,14 +7,33 @@ var taskListBtn = document.getElementById('make-task-list-btn');
 var noTasksMsg = document.getElementById('no-tasks-msg');
 var tasksListsSection = document.querySelector('.task-lists-column');
 
-plusBtn.addEventListener('click', addTaskItem)
+plusBtn.addEventListener('click', function() {
+  addTaskItem();
+  enableTaskListBtn();
+})
 taskItemBox.addEventListener('click', function() {
   deleteTaskItem(event)
 })
 taskItemInput.addEventListener('keyup', activatePlusBtn)
-taskListBtn.addEventListener('click', addTaskCard)
+taskListBtn.addEventListener('click', function() {
+  addTaskCard();
+});
+// taskForm.addEventListener('keyup', enableTaskListBtn)
 
-activatePlusBtn();
+disableAllButtons();
+
+function enableTaskListBtn() {
+  if (taskTitleInput.value && taskItemBox.hasChildNodes()) {
+    taskListBtn.disabled = false;
+  }
+}
+
+function disableAllButtons() {
+  var buttons = document.querySelectorAll('button');
+  buttons.forEach(function(button) {
+    button.disabled = true;
+  })
+}
 
 function addTaskCard() {
   noTasksMsg.remove();
