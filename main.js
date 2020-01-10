@@ -1,11 +1,23 @@
 var taskItemBox = document.querySelector('.task-item-box');
 var taskItemInput = document.getElementById('task-item-input');
-var plusButton = document.getElementById('add-task-btn');
+var plusBtn = document.getElementById('add-task-btn');
 
-plusButton.addEventListener('click', addTaskItem)
+plusBtn.addEventListener('click', addTaskItem)
 taskItemBox.addEventListener('click', function() {
   deleteTaskItem(event)
 })
+
+taskItemInput.addEventListener('keyup', activatePlusBtn)
+
+activatePlusBtn();
+
+function activatePlusBtn() {
+  if (taskItemInput.value) {
+    plusBtn.disabled = false;
+  } else {
+    plusBtn.disabled = true;
+  }
+}
 
 function addTaskItem() {
   var taskItemHTML = `<div class="item">
@@ -13,6 +25,7 @@ function addTaskItem() {
   </div>`
   taskItemBox.insertAdjacentHTML('beforeend', taskItemHTML);
   taskItemInput.value = '';
+  activatePlusBtn();
 }
 
 function deleteTaskItem(event) {
