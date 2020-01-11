@@ -17,6 +17,8 @@ tasksListsSection.addEventListener('click', function() {
   // addTasksOnLoad();
 })
 
+// tasksListsSection.addEventListener('keyup', checkIfDeleteIsActive)
+
 plusBtn.addEventListener('click', function() {
   addTaskItem();
   enableTaskListBtn();
@@ -34,6 +36,8 @@ taskForm.addEventListener('keyup', enableClearBtn)
 clearAllBtn.addEventListener('click', clearForm)
 
 disableAllButtons();
+checkStorage();
+addTasksOnLoad();
 
 function checkIfChecked() {
   var allCheckBoxes = document.querySelectorAll('input[type="checkbox"]');
@@ -87,22 +91,18 @@ function disableAllButtons() {
   })
 }
 
-function addTaskCard(id) {
-  noTasksMsg.remove();
-  var allTaskItems = document.querySelectorAll('.task-p');
-  var checklistHTML = '';
-  allTaskItems.forEach(function(task){
-    checklistHTML += `<div class="check-pair">
-      <input class="checkbox" type="checkbox"><p>${task.innerText}</p>
-    </div>`;
-  });
-  var taskCard = makeTaskCard(id, taskTitleInput.value, checklistHTML);
-  tasksListsSection.insertAdjacentHTML('afterbegin', taskCard);
-}
-
-checkStorage();
-addTasksOnLoad();
-
+// function addTaskCard(id) {
+//   noTasksMsg.remove();
+//   var allTaskItems = document.querySelectorAll('.task-p');
+//   var checklistHTML = '';
+//   allTaskItems.forEach(function(task){
+//     checklistHTML += `<div class="check-pair">
+//       <input class="checkbox" type="checkbox"><p>${task.innerText}</p>
+//     </div>`;
+//   });
+//   var taskCard = makeTaskCard(id, taskTitleInput.value, checklistHTML);
+//   tasksListsSection.insertAdjacentHTML('afterbegin', taskCard);
+// }
 
 function makeTaskCard(id, title, checklistHTML) {
   var taskCard = `<div id=${id} class="task-card">
@@ -125,7 +125,7 @@ function makeTaskCard(id, title, checklistHTML) {
 }
 
 function checkStorage() {
-  if (localStorage.getItem('task lists')) {
+  if (localStorage.getItem('task lists') !== '[]' && localStorage.getItem('task lists') !== null) {
     noTasksMsg.remove();
     taskLists = JSON.parse(localStorage.getItem('task lists'));
     for (var g = 0; g < taskLists.length; g++) {
@@ -137,27 +137,28 @@ function checkStorage() {
 }
 
 function addTasksOnLoad() {
-  if (localStorage.getItem('task lists')) {
+  if (localStorage.getItem('task lists') !== '[]' && localStorage.getItem('task lists') !== null) {
     tasksListsSection.innerHTML = ''
-  }
-  for (var i = 0; i < taskLists.length; i++) {
-    var checklistHTML = '';
-    var taskItems = taskLists[i].tasks;
-    for (var j = 0; j < taskItems.length; j++) {
-      var taskId = taskItems[j].id;
-      taskItems[j] = new Task(taskId, taskItems[j].content, taskItems[j].completed);
-      var checkedStatus = '';
-      if (taskItems[j].completed === true) {
-        checkedStatus = `checked="checked"`
+    for (var i = 0; i < taskLists.length; i++) {
+      var checklistHTML = '';
+      var taskItems = taskLists[i].tasks;
+      for (var j = 0; j < taskItems.length; j++) {
+        var taskId = taskItems[j].id;
+        taskItems[j] = new Task(taskId, taskItems[j].content, taskItems[j].completed);
+        var checkedStatus = '';
+        if (taskItems[j].completed === true) {
+          checkedStatus = `checked="checked"`
+        }
+        checklistHTML += `<div class="check-pair">
+          <input id=${taskId} class="checkbox" type="checkbox" ${checkedStatus}><p>${taskItems[j].content}</p>
+        </div>`;
       }
-      checklistHTML += `<div class="check-pair">
-        <input id=${taskId} class="checkbox" type="checkbox" ${checkedStatus}><p>${taskItems[j].content}</p>
-      </div>`;
+      var taskCard = makeTaskCard(taskLists[i].id, taskLists[i].title, checklistHTML);
+      tasksListsSection.insertAdjacentHTML('afterbegin', taskCard);
+      checkIfChecked();
     }
-    var taskCard = makeTaskCard(taskLists[i].id, taskLists[i].title, checklistHTML);
-    tasksListsSection.insertAdjacentHTML('afterbegin', taskCard);
-    checkIfChecked();
   }
+
 }
 
 function addTasksToStorage() {
@@ -198,6 +199,12 @@ function deleteTaskItem(event) {
   }
 }
 
+function checkIfNoMoreCards() {
+  if (!tasksListsSection.innerHTML) {
+    tasksListsSection.innerHTML = `<h3 id="no-tasks-msg">No tasks yet! Create a new task list to get started.</h3>`
+  }
+}
+
 function deleteTaskCard(event) {
   if (event.target.classList.contains('delete')) {
     var targetCard = event.target.closest('.task-card');
@@ -208,4 +215,5 @@ function deleteTaskCard(event) {
       }
     }
   }
+  checkIfNoMoreCards();
 }
