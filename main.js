@@ -17,6 +17,24 @@ tasksListsSection.addEventListener('click', function() {
   // addTasksOnLoad();
 })
 
+plusBtn.addEventListener('click', function() {
+  addTaskItem();
+  enableTaskListBtn();
+})
+taskItemBox.addEventListener('click', function() {
+  deleteTaskItem(event);
+})
+
+taskItemInput.addEventListener('keyup', activatePlusBtn)
+taskListBtn.addEventListener('click', function() {
+  addTasksToStorage();
+  clearForm();
+});
+taskForm.addEventListener('keyup', enableClearBtn)
+clearAllBtn.addEventListener('click', clearForm)
+
+disableAllButtons();
+
 function checkIfChecked() {
   var allCheckBoxes = document.querySelectorAll('input[type="checkbox"]');
   for (var i = 0; i < allCheckBoxes.length; i++) {
@@ -44,25 +62,10 @@ function changeCheckedStatus() {
   }
 }
 
-plusBtn.addEventListener('click', function() {
-  addTaskItem();
-  enableTaskListBtn();
-})
-taskItemBox.addEventListener('click', function() {
-  deleteTaskItem(event);
-})
-
-taskItemInput.addEventListener('keyup', activatePlusBtn)
-taskListBtn.addEventListener('click', function() {
-  addTasksToStorage();
-});
-taskForm.addEventListener('keyup', enableClearBtn)
-clearAllBtn.addEventListener('click', clearForm)
-
-disableAllButtons();
-
 function clearForm() {
   taskForm.reset();
+  taskItemBox.innerHTML = '';
+  disableAllButtons();
 }
 
 function enableClearBtn() {
