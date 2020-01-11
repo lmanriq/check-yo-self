@@ -11,14 +11,14 @@ var taskLists = [];
 
 tasksListsSection.addEventListener('click', function() {
   changeCheckedStatus();
-  addTaskListsToStorage()
+  addTaskListsToStorage();
+  deleteTaskCard(event);
 })
 
 function checkIfChecked() {
   var allCheckBoxes = document.querySelectorAll('input[type="checkbox"]');
   allCheckBoxes.forEach(function(checkBox) {
     if (checkBox.checked == true) {
-      console.log('hi')
       checkBox.disabled = true;
     }
   })
@@ -55,11 +55,11 @@ plusBtn.addEventListener('click', function() {
   enableTaskListBtn();
 })
 taskItemBox.addEventListener('click', function() {
-  deleteTaskItem(event)
+  deleteTaskItem(event);
 })
+
 taskItemInput.addEventListener('keyup', activatePlusBtn)
 taskListBtn.addEventListener('click', function() {
-  addTaskCard();
   addTasksToStorage();
 });
 taskForm.addEventListener('keyup', enableClearBtn)
@@ -90,23 +90,23 @@ function disableAllButtons() {
   })
 }
 
-function addTaskCard() {
+function addTaskCard(id) {
   noTasksMsg.remove();
-  var allTasks = document.querySelectorAll('.task-p');
+  var allTaskItems = document.querySelectorAll('.task-p');
   var checklistHTML = '';
-  allTasks.forEach(function(task){
+  allTaskItems.forEach(function(task){
     checklistHTML += `<div class="check-pair">
       <input class="checkbox" type="checkbox"><p>${task.innerText}</p>
     </div>`;
   });
-  var taskCard = makeTaskCard(taskTitleInput.value, checklistHTML);
+  var taskCard = makeTaskCard(id, taskTitleInput.value, checklistHTML);
   tasksListsSection.insertAdjacentHTML('afterbegin', taskCard);
 }
 
 addTasksOnLoad();
 
-function makeTaskCard(title, checklistHTML) {
-  var taskCard = `<div class="task-card">
+function makeTaskCard(id, title, checklistHTML) {
+  var taskCard = `<div id=${id} class="task-card">
     <h2 class="card-title">${title}</h2>
     <div class="card-list-box">
     ${checklistHTML}
@@ -116,7 +116,7 @@ function makeTaskCard(title, checklistHTML) {
         <img src="assets/urgent.svg" alt="urgent icon">
         <p>URGENT</p>
       </div>
-      <div class="delete-box">
+      <div class="delete task-list-delete">
         <img class="delete" src="assets/delete.svg" alt="delete button">
         <p>DELETE</p>
       </div>
@@ -151,7 +151,7 @@ function addTasksOnLoad() {
           <input id=${taskId} class="checkbox" type="checkbox" ${checkedStatus}><p>${task.content}</p>
         </div>`;
       })
-      var taskCard = makeTaskCard(taskList.title, checklistHTML);
+      var taskCard = makeTaskCard(taskList.id, taskList.title, checklistHTML);
       tasksListsSection.insertAdjacentHTML('afterbegin', taskCard);
       checkIfChecked();
     })
@@ -162,12 +162,14 @@ function addTasksToStorage() {
   var taskItems = [];
   var allTasks = document.querySelectorAll('.task-p');
   var id = new Date().valueOf();
+  var taskId = id;
   allTasks.forEach(function(task){
-    id += 'a';
-    taskItems.push(new Task(id, task.innerText, false));
+    taskId += 'a';
+    taskItems.push(new Task(taskId, task.innerText, false));
   })
   var toDo = new ToDoList(id, taskTitleInput.value, taskItems);
   toDo.saveToStorage();
+  addTaskCard(id);
 }
 
 function activatePlusBtn() {
@@ -190,5 +192,18 @@ function addTaskItem() {
 function deleteTaskItem(event) {
   if (event.target.classList.contains('delete')) {
     event.target.parentNode.remove();
+  }
+}
+
+function deleteTaskCard(event) {
+  if (event.target.classList.contains('delete')) {
+    var targetCard = event.target.closest('.task-card');
+    taskLists.forEach(function(list) {
+      if (list.id == targetCard.id) {
+        targetCard.remove();
+        console.log(list);
+        // list.deleteFromStorage();
+      }
+    })
   }
 }
