@@ -22,11 +22,11 @@ class ToDoList {
   }
 
   updateTask(id, content, completed) {
-    this.tasks.forEach(function(task) {
-      if (task.id === id) {
-        task.content = content;
-        task.completed = true;
+    for (var i = 0; i < this.tasks.length; i++) {
+      if (this.tasks[i].id === id) {
+        this.tasks[i].content = content;
+        this.tasks[i].completed = true;
       }
-    })
+    }
   }
 }
