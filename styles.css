@@ -37,6 +37,11 @@ button {
   color: #fff;
 }
 
+/* button:active:hover {
+  border: 1px solid #782616;
+  background-color: #ef4a23;
+} */
+
 header {
   width: 100%;
   justify-content: space-between;
@@ -76,6 +81,7 @@ header {
 .form-box,
 .filter-box {
   padding: 1em;
+  color: #fff;
 }
 
 .filter-box {
@@ -88,9 +94,27 @@ label,
   display: block;
 }
 
+.task-item-wrap,
+.task-input {
+  border: 1.5px solid #1f1f3d;
+  border-radius: 5px;
+}
+
+
+label {
+  font-size: 0.7em;
+  margin-bottom: 0.4em;
+  opacity: 0.6;
+}
+
 .task-input,
 .task-buttons {
   height: 2.5em;
+}
+
+.task-buttons {
+  font-size: 0.8em;
+  font-weight: 800;
 }
 
 .task-input,
@@ -101,7 +125,7 @@ label,
 }
 
 .item {
-  padding-bottom: 0.5em;
+  padding: 0 1em 0.5em 1em;
   align-items: center;
 }
 
@@ -115,11 +139,13 @@ label,
 
 .item-input {
   width: 100%;
+  border: none;
 }
 
 .add-button {
   width: 15%;
   font-size: 1em;
+  border: none;
 }
 
 /* TASK LIST SECTION */
@@ -163,8 +189,12 @@ h2 {
 }
 
 .check-pair {
-  justify-content: space-around;
+  align-items: center;
   margin: 1em;
+}
+
+.check-pair input {
+  margin-right: 1em;
 }
 
 .card-footer {
@@ -173,8 +203,13 @@ h2 {
 }
 
 .urgent-box,
-.delete-box {
+.delete {
   text-align: center;
+}
+
+.delete.active {
+  font-weight: 800;
+  color: #f00;
 }
 
 .urgent {
