@@ -21,10 +21,9 @@ class ToDoList {
     this.urgent = urgency;
   }
 
-  updateTask(id, content, completed) {
+  updateTask(id) {
     for (var i = 0; i < this.tasks.length; i++) {
-      if (this.tasks[i].id === id) {
-        this.tasks[i].content = content;
+      if (this.tasks[i].id === id && this.tasks[i].completed === false) {
         this.tasks[i].completed = true;
       }
     }
