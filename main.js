@@ -17,7 +17,9 @@ tasksListsSection.addEventListener('click', function() {
   // addTasksOnLoad();
 })
 
-// tasksListsSection.addEventListener('keyup', checkIfDeleteIsActive)
+tasksListsSection.addEventListener('click', function() {
+  checkIfDeleteIsActive()
+})
 
 plusBtn.addEventListener('click', function() {
   addTaskItem();
@@ -31,6 +33,7 @@ taskItemInput.addEventListener('keyup', activatePlusBtn)
 taskListBtn.addEventListener('click', function() {
   addTasksToStorage();
   clearForm();
+  checkIfDeleteIsActive();
 });
 taskForm.addEventListener('keyup', enableClearBtn)
 clearAllBtn.addEventListener('click', clearForm)
@@ -38,6 +41,7 @@ clearAllBtn.addEventListener('click', clearForm)
 disableAllButtons();
 checkStorage();
 addTasksOnLoad();
+checkIfDeleteIsActive();
 
 function checkIfChecked() {
   var allCheckBoxes = document.querySelectorAll('input[type="checkbox"]');
@@ -115,10 +119,10 @@ function makeTaskCard(id, title, checklistHTML) {
         <img src="assets/urgent.svg" alt="urgent icon">
         <p>URGENT</p>
       </div>
-      <div class="delete task-list-delete">
-        <img class="delete" src="assets/delete.svg" alt="delete button">
+      <button class="delete task-list-delete">
+        <img class="delete-img" src="assets/delete.svg" alt="delete button">
         <p>DELETE</p>
-      </div>
+      </button>
     </div>
   </div>`
   return taskCard;
@@ -205,8 +209,31 @@ function checkIfNoMoreCards() {
   }
 }
 
+function checkIfDeleteIsActive() {
+  var allTaskCards = document.querySelectorAll('.task-card');
+  for (var t = 0; t < allTaskCards.length; t++) {
+    var allChecked = true;
+    var cardFooter = allTaskCards[t].childNodes[allTaskCards[t].childNodes.length - 2];
+    var deleteBtn = cardFooter.childNodes[3];
+    var cardList = allTaskCards[t].querySelector('.card-list-box')
+    // first and last nodes are text
+    for (var i = 1; i < cardList.childNodes.length - 1; i++) {
+      //Select the checkbox input child node
+      if (!cardList.childNodes[i].childNodes[1].checked) {
+        allChecked = false;
+      }
+    }
+    if (allChecked) {
+      deleteBtn.disabled = false;
+    } else {
+      deleteBtn.disabled = true;
+    }
+  }
+}
+
 function deleteTaskCard(event) {
   if (event.target.classList.contains('delete')) {
+    console.log(event.target);
     var targetCard = event.target.closest('.task-card');
     for (var i = 0; i < taskLists.length; i++) {
       if (taskLists[i].id == targetCard.id) {
