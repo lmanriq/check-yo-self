@@ -129,32 +129,29 @@ function addTasksOnLoad() {
   if (localStorage.getItem('task lists')) {
     noTasksMsg.remove();
     taskLists = JSON.parse(localStorage.getItem('task lists'));
-    taskLists.forEach(function(taskList) {
-      //Reassign each task list to get its methods back
-      var listId = taskList.id;
-      var listTasks = taskList.tasks;
-      taskList = new ToDoList(listId, taskList.title, listTasks);
-    })
-    taskLists.forEach(function(taskList) {
+    for (var g = 0; g < taskLists.length; g++) {
+      var listId = taskLists[g].id;
+      var listTasks = taskLists[g].tasks;
+      taskLists[g] = new ToDoList(listId, taskLists[g].title, listTasks);
+    }
+    for (var i = 0; i < taskLists.length; i++) {
       var checklistHTML = '';
-      var taskItems = taskList.tasks;
-      taskItems.forEach(function(task) {
-        //replace existing tasks with newly instantiated tasks
-        //Give input an ID that matches ID of input
-        var taskId = task.id;
-        task = new Task(taskId, task.content, task.completed);
+      var taskItems = taskLists[i].tasks;
+      for (var j = 0; j < taskItems.length; j++) {
+        var taskId = taskItems[j].id;
+        taskItems[j] = new Task(taskId, taskItems[j].content, taskItems[j].completed);
         var checkedStatus = '';
-        if (task.completed === true) {
+        if (taskItems[j].completed === true) {
           checkedStatus = `checked="checked"`
         }
         checklistHTML += `<div class="check-pair">
-          <input id=${taskId} class="checkbox" type="checkbox" ${checkedStatus}><p>${task.content}</p>
+          <input id=${taskId} class="checkbox" type="checkbox" ${checkedStatus}><p>${taskItems[j].content}</p>
         </div>`;
-      })
-      var taskCard = makeTaskCard(taskList.id, taskList.title, checklistHTML);
+      }
+      var taskCard = makeTaskCard(taskLists[i].id, taskLists[i].title, checklistHTML);
       tasksListsSection.insertAdjacentHTML('afterbegin', taskCard);
       checkIfChecked();
-    })
+    }
   }
 }
 
@@ -198,12 +195,11 @@ function deleteTaskItem(event) {
 function deleteTaskCard(event) {
   if (event.target.classList.contains('delete')) {
     var targetCard = event.target.closest('.task-card');
-    taskLists.forEach(function(list) {
-      if (list.id == targetCard.id) {
+    for (var i = 0; i < taskLists.length; i++) {
+      if (taskLists[i].id == targetCard.id) {
         targetCard.remove();
-        console.log(list);
-        // list.deleteFromStorage();
+        taskLists[i].deleteFromStorage();
       }
-    })
+    }
   }
 }
