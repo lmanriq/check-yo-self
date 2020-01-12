@@ -313,7 +313,6 @@ function searchPartialString(zone, list, filteredLists) {
 }
 
 function searchAllTasksOnDOM() {
-  removeAllCards();
   if (searchBar.value) {
     var filteredLists = [];
     taskLists.forEach(function(list) {
@@ -326,6 +325,7 @@ function searchAllTasksOnDOM() {
   } else {
     populateCards(taskLists);
   }
+  console.log(filteredLists)
 }
 
 function updateCheckedData(task, j) {
