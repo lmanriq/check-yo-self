@@ -9,13 +9,30 @@ var tasksListsSection = document.querySelector('.task-lists-column');
 var clearAllBtn = document.getElementById('clear-all-btn');
 var taskLists = [];
 
-tasksListsSection.addEventListener('click', function() {
-  changeCheckedStatus();
-  addTaskListsToStorage();
+tasksListsSection.addEventListener('click', function(event) {
+  changeCheckedStatus(event);
   deleteTaskCard(event);
   checkIfChecked();
+  markUrgent(event);
+  // addTaskListsToStorage(taskLists);
   // addTasksOnLoad();
 })
+
+function markUrgent(event) {
+  if (event.target.classList.contains('urgent') && !event.target.classList.contains('active')) {
+    event.target.classList.add('active');
+    // event.target.innerHTML = new HTML
+    var targetCard = event.target.closest('.task-card');
+    for (var i = 0; i < taskLists.length; i++) {
+      if (taskLists[i].id == targetCard.id) {
+        taskLists[i].updateToDo(taskLists[i].title, true);
+        // taskLists[i].saveToStorage();
+      }
+    }
+    console.log(taskLists);
+    addTaskListsToStorage(taskLists);
+  }
+}
 
 tasksListsSection.addEventListener('click', function() {
   checkIfDeleteIsActive()
@@ -25,7 +42,7 @@ plusBtn.addEventListener('click', function() {
   addTaskItem();
   enableTaskListBtn();
 })
-taskItemBox.addEventListener('click', function() {
+taskItemBox.addEventListener('click', function(event) {
   deleteTaskItem(event);
 })
 
@@ -52,11 +69,11 @@ function checkIfChecked() {
   }
 }
 
-function addTaskListsToStorage() {
+function addTaskListsToStorage(taskLists) {
   localStorage.setItem('task lists', JSON.stringify(taskLists));
 }
 
-function changeCheckedStatus() {
+function changeCheckedStatus(event) {
   if (event.target.classList.contains('checkbox')) {
     for (var i = 0; i < taskLists.length; i++) {
       for (var j = 0; j < taskLists[i].tasks.length; j++) {
@@ -115,9 +132,9 @@ function makeTaskCard(id, title, checklistHTML) {
     ${checklistHTML}
     </div>
     <div class="card-footer">
-      <div class="urgent-box">
-        <img src="assets/urgent.svg" alt="urgent icon">
-        <p>URGENT</p>
+      <div class="urgent urgent-box">
+        <img class="urgent" src="assets/urgent.svg" alt="urgent icon">
+        <p class="urgent">URGENT</p>
       </div>
       <button class="delete task-list-delete">
         <img class="delete delete-img" src="assets/delete.svg" alt="delete button">
@@ -133,9 +150,7 @@ function checkStorage() {
     noTasksMsg.remove();
     taskLists = JSON.parse(localStorage.getItem('task lists'));
     for (var g = 0; g < taskLists.length; g++) {
-      var listId = taskLists[g].id;
-      var listTasks = taskLists[g].tasks;
-      taskLists[g] = new ToDoList(listId, taskLists[g].title, listTasks);
+      taskLists[g] = new ToDoList(taskLists[g].id, taskLists[g].title, taskLists[g].urgent, taskLists[g].tasks);
     }
   }
 }
@@ -174,7 +189,7 @@ function addTasksToStorage() {
     taskId += 'a';
     taskItems.push(new Task(taskId, task.innerText, false));
   })
-  var toDo = new ToDoList(id, taskTitleInput.value, taskItems);
+  var toDo = new ToDoList(id, taskTitleInput.value, false, taskItems);
   toDo.saveToStorage();
   // addTaskCard(id);
   addTasksOnLoad();
