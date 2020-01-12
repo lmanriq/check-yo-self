@@ -49,6 +49,16 @@ function activatePlusBtn() {
   }
 }
 
+function activateUrgentIcon(list, card) {
+  if (list.id == card.id) {
+    var urgentBox = card.querySelector('.urgent-box');
+    urgentBox.innerHTML = `<img class="urgent" src="assets/urgent-active.svg" alt="urgent icon">
+    <p class="urgent">URGENT</p>`
+    urgentBox.classList.add('active');
+    card.classList.add('urgent-card');
+  }
+}
+
 function addTaskItem() {
   var taskItemHTML = `<div class="item">
     <img class="delete" src="assets/delete.svg" alt="delete icon"><p class="task-p">${taskItemInput.value}</p>
@@ -137,16 +147,6 @@ function checkIfDeleteIsActive() {
 function checkIfNoMoreCards() {
   if (!tasksListsSection.innerHTML) {
     tasksListsSection.innerHTML = `<h3 id="no-tasks-msg">No tasks yet! Create a new task list to get started.</h3>`
-  }
-}
-
-function activateUrgentIcon(list, card) {
-  if (list.id == card.id) {
-    var urgentBox = card.querySelector('.urgent-box');
-    urgentBox.innerHTML = `<img class="urgent" src="assets/urgent-active.svg" alt="urgent icon">
-    <p class="urgent">URGENT</p>`
-    urgentBox.classList.add('active');
-    card.classList.add('urgent-card');
   }
 }
 
