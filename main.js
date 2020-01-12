@@ -3,7 +3,7 @@ var filterBtn = document.getElementById('filter-btn');
 var noTasksMsg = document.getElementById('no-tasks-msg');
 var plusBtn = document.getElementById('add-task-btn');
 var searchBar = document.getElementById('search-bar');
-var searchSelector = document.getElementById('search-bar');
+var searchSelector = document.getElementById('search-selector');
 var taskForm = document.querySelector('form');
 var taskItemBox = document.querySelector('.task-item-box');
 var taskItemInput = document.getElementById('task-item-input');
@@ -328,11 +328,19 @@ function searchItems(filteredLists) {
 }
 
 function searchAllTasksOnDOM() {
-  if (searchBar.value) {
+  if (searchBar.value && searchSelector.value === 'all') {
     var filteredLists = [];
     searchLists(filteredLists);
     searchItems(filteredLists);
     populateCards(filteredLists);
+  } else if (searchBar.value && searchSelector.value === 'task list') {
+    var filteredTasks = [];
+    searchLists(filteredTasks);
+    populateCards(filteredTasks);
+  } else if (searchBar.value && searchSelector.value === 'task items') {
+    var filteredItems = [];
+    searchItems(filteredItems);
+    populateCards(filteredItems);
   } else {
     populateCards(taskLists);
   }
