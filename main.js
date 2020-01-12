@@ -328,19 +328,17 @@ function searchItems(filteredLists) {
 }
 
 function searchAllTasksOnDOM() {
+  var filteredLists = [];
   if (searchBar.value && searchSelector.value === 'all') {
-    var filteredLists = [];
     searchLists(filteredLists);
     searchItems(filteredLists);
     populateCards(filteredLists);
   } else if (searchBar.value && searchSelector.value === 'title') {
-    var filteredTasks = [];
-    searchLists(filteredTasks);
-    populateCards(filteredTasks);
+    searchLists(filteredLists);
+    populateCards(filteredLists);
   } else if (searchBar.value && searchSelector.value === 'tasks') {
-    var filteredItems = [];
-    searchItems(filteredItems);
-    populateCards(filteredItems);
+    searchItems(filteredLists);
+    populateCards(filteredLists);
   } else {
     populateCards(taskLists);
   }
