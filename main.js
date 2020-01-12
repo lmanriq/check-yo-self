@@ -66,7 +66,7 @@ function changeCheckedStatus() {
         }
       }
     }
-    event.target.disabled = true;
+    // event.target.disabled = true;
   }
 }
 
@@ -120,8 +120,8 @@ function makeTaskCard(id, title, checklistHTML) {
         <p>URGENT</p>
       </div>
       <button class="delete task-list-delete">
-        <img class="delete-img" src="assets/delete.svg" alt="delete button">
-        <p>DELETE</p>
+        <img class="delete delete-img" src="assets/delete.svg" alt="delete button">
+        <p class="delete">DELETE</p>
       </button>
     </div>
   </div>`
@@ -225,15 +225,20 @@ function checkIfDeleteIsActive() {
     }
     if (allChecked) {
       deleteBtn.disabled = false;
+      deleteBtn.classList.add('active');
+      deleteBtn.innerHTML = `<img class="delete delete-img" src="assets/delete-active.svg" alt="delete button">
+      <p class="delete">DELETE</p>`
     } else {
       deleteBtn.disabled = true;
+      deleteBtn.classList.remove('active');
+      deleteBtn.innerHTML = `<img class="delete delete-img" src="assets/delete.svg" alt="delete button">
+      <p class="delete">DELETE</p>`
     }
   }
 }
 
 function deleteTaskCard(event) {
-  if (event.target.classList.contains('delete')) {
-    console.log(event.target);
+  if (event.target.classList.contains('delete') && !event.target.closest('button').disabled) {
     var targetCard = event.target.closest('.task-card');
     for (var i = 0; i < taskLists.length; i++) {
       if (taskLists[i].id == targetCard.id) {
