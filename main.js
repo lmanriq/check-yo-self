@@ -8,10 +8,43 @@ var noTasksMsg = document.getElementById('no-tasks-msg');
 var tasksListsSection = document.querySelector('.task-lists-column');
 var clearAllBtn = document.getElementById('clear-all-btn');
 var filterBtn = document.getElementById('filter-btn');
-var searchBar = document.getElementById('search-bar')
+var searchBar = document.getElementById('search-bar');
 var taskLists = [];
 
-filterBtn.addEventListener('click', filterByUrgency)
+filterBtn.addEventListener('click', filterByUrgency);
+searchBar.addEventListener('keyup', searchTasksOnDOM)
+
+
+function removeAllCards() {
+  var allCards = document.querySelectorAll('.task-card');
+  allCards.forEach(function(card) {
+    card.remove();
+  })
+}
+
+function searchTasksOnDOM() {
+  if (searchBar.value) {
+    var filteredLists = [];
+    removeAllCards();
+    taskLists.forEach(function(list) {
+      list.tasks.forEach(function(task) {
+        searchPartialString(task.content, list, filteredLists);
+      })
+      searchPartialString(list.title, list, filteredLists);
+    })
+    populateCards(filteredLists);
+  } else {
+    removeAllCards();
+    populateCards(taskLists);
+  }
+}
+
+function searchPartialString(zone, list, filteredLists) {
+  var searchTerm = searchBar.value;
+  if (searchTerm === zone.slice(0, searchTerm.length) && filteredLists.indexOf(list) === -1) {
+    filteredLists.push(list);
+  }
+}
 
 function filterByUrgency() {
   var urgentTaskLists = [];
