@@ -7,7 +7,22 @@ var taskListBtn = document.getElementById('make-task-list-btn');
 var noTasksMsg = document.getElementById('no-tasks-msg');
 var tasksListsSection = document.querySelector('.task-lists-column');
 var clearAllBtn = document.getElementById('clear-all-btn');
+var filterBtn = document.getElementById('filter-btn');
 var taskLists = [];
+
+filterBtn.addEventListener('click', filterByUrgency)
+
+function filterByUrgency() {
+  var allTaskCards = document.querySelectorAll('.task-card');
+  var urgentCards = [];
+  for (var i = 0; i < allTaskCards.length; i++) {
+    var urgentBox = allTaskCards[i].querySelector('.urgent-box');
+    if (urgentBox.classList.contains('active')) {
+      urgentCards.push(allTaskCards[i]);
+    }
+  }
+  console.log(urgentCards);
+}
 
 tasksListsSection.addEventListener('click', function(event) {
   changeCheckedStatus(event);
@@ -110,6 +125,7 @@ function disableAllButtons() {
   buttons.forEach(function(button) {
     button.disabled = true;
   })
+  filterBtn.disabled = false;
 }
 
 // function addTaskCard(id) {
@@ -245,8 +261,10 @@ function checkIfUrgent() {
       var allTaskCards = document.querySelectorAll('.task-card');
       for (var j = 0; j < allTaskCards.length; j++) {
         if (taskLists[i].id == allTaskCards[j].id) {
-          allTaskCards[j].querySelector('.urgent-box').innerHTML = `<img class="urgent" src="assets/urgent-active.svg" alt="urgent icon">
+          var urgentBox = allTaskCards[j].querySelector('.urgent-box');
+          urgentBox.innerHTML = `<img class="urgent" src="assets/urgent-active.svg" alt="urgent icon">
           <p class="urgent">URGENT</p>`
+          urgentBox.classList.add('active');
           allTaskCards[j].classList.add('urgent-card');
         }
       }
