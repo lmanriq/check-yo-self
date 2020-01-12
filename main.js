@@ -19,7 +19,7 @@ plusBtn.addEventListener('click', function() {
   addTaskItem();
   enableTaskListBtn();
 });
-searchBar.addEventListener('keyup', searchTasksOnDOM);
+searchBar.addEventListener('keyup', searchAllTasksOnDOM);
 taskForm.addEventListener('keyup', enableClearBtn);
 taskItemBox.addEventListener('click', function(event) {
   deleteTaskItem(event);
@@ -87,10 +87,7 @@ function changeCheckedStatus(event) {
   if (event.target.classList.contains('checkbox')) {
     for (var i = 0; i < taskLists.length; i++) {
       for (var j = 0; j < taskLists[i].tasks.length; j++) {
-        if (event.target.id === taskLists[i].tasks[j].id) {
-          taskLists[i].updateTask(event.target.id);
-          event.target.disabled = true;
-        }
+        updateCheckedData(taskLists[i], j);
       }
     }
   }
@@ -143,18 +140,22 @@ function checkIfNoMoreCards() {
   }
 }
 
+function activateUrgentIcon(list, card) {
+  if (list.id == card.id) {
+    var urgentBox = card.querySelector('.urgent-box');
+    urgentBox.innerHTML = `<img class="urgent" src="assets/urgent-active.svg" alt="urgent icon">
+    <p class="urgent">URGENT</p>`
+    urgentBox.classList.add('active');
+    card.classList.add('urgent-card');
+  }
+}
+
 function checkIfUrgent() {
   for (var i = 0; i < taskLists.length; i++) {
     if (taskLists[i].urgent === true) {
       var allTaskCards = document.querySelectorAll('.task-card');
       for (var j = 0; j < allTaskCards.length; j++) {
-        if (taskLists[i].id == allTaskCards[j].id) {
-          var urgentBox = allTaskCards[j].querySelector('.urgent-box');
-          urgentBox.innerHTML = `<img class="urgent" src="assets/urgent-active.svg" alt="urgent icon">
-          <p class="urgent">URGENT</p>`
-          urgentBox.classList.add('active');
-          allTaskCards[j].classList.add('urgent-card');
-        }
+        activateUrgentIcon(taskLists[i], allTaskCards[j]);
       }
     }
   }
@@ -280,7 +281,6 @@ function markUrgent(event) {
         taskLists[i].updateToDo(taskLists[i].title, true);
       }
     }
-    console.log(taskLists);
     addTaskListsToStorage(taskLists);
   }
 }
@@ -312,7 +312,7 @@ function searchPartialString(zone, list, filteredLists) {
   }
 }
 
-function searchTasksOnDOM() {
+function searchAllTasksOnDOM() {
   removeAllCards();
   if (searchBar.value) {
     var filteredLists = [];
@@ -325,5 +325,12 @@ function searchTasksOnDOM() {
     populateCards(filteredLists);
   } else {
     populateCards(taskLists);
+  }
+}
+
+function updateCheckedData(task, j) {
+  if (event.target.id === task.tasks[j].id) {
+    task.updateTask(event.target.id);
+    event.target.disabled = true;
   }
 }
