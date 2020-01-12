@@ -11,9 +11,39 @@ var filterBtn = document.getElementById('filter-btn');
 var searchBar = document.getElementById('search-bar');
 var taskLists = [];
 
+disableAllButtons();
+checkStorage();
+addTasksOnLoad();
+checkIfDeleteIsActive();
+checkIfUrgent();
+
 filterBtn.addEventListener('click', filterByUrgency);
 searchBar.addEventListener('keyup', searchTasksOnDOM)
-
+tasksListsSection.addEventListener('click', function(event) {
+  changeCheckedStatus(event);
+  deleteTaskCard(event);
+  checkIfChecked();
+  checkIfUrgent();
+  checkIfDeleteIsActive();
+  markUrgent(event);
+  addTaskListsToStorage(taskLists);
+})
+plusBtn.addEventListener('click', function() {
+  addTaskItem();
+  enableTaskListBtn();
+})
+taskItemBox.addEventListener('click', function(event) {
+  deleteTaskItem(event);
+})
+taskItemInput.addEventListener('keyup', activatePlusBtn)
+taskListBtn.addEventListener('click', function() {
+  addTasksToStorage();
+  clearForm();
+  checkIfDeleteIsActive();
+  checkIfUrgent();
+});
+taskForm.addEventListener('keyup', enableClearBtn)
+clearAllBtn.addEventListener('click', clearForm)
 
 function removeAllCards() {
   var allCards = document.querySelectorAll('.task-card');
@@ -23,9 +53,9 @@ function removeAllCards() {
 }
 
 function searchTasksOnDOM() {
+  removeAllCards();
   if (searchBar.value) {
     var filteredLists = [];
-    removeAllCards();
     taskLists.forEach(function(list) {
       list.tasks.forEach(function(task) {
         searchPartialString(task.content, list, filteredLists);
@@ -34,7 +64,6 @@ function searchTasksOnDOM() {
     })
     populateCards(filteredLists);
   } else {
-    removeAllCards();
     populateCards(taskLists);
   }
 }
@@ -53,7 +82,7 @@ function filterByUrgency() {
       urgentTaskLists.push(taskLists[i]);
     }
   }
-  tasksListsSection.innerHTML = '';
+  // tasksListsSection.innerHTML = '';
   if (!filterBtn.classList.contains('active')) {
     populateCards(urgentTaskLists);
     filterBtn.classList.add('active');
@@ -62,17 +91,6 @@ function filterByUrgency() {
     filterBtn.classList.remove('active');
   }
 }
-
-tasksListsSection.addEventListener('click', function(event) {
-  changeCheckedStatus(event);
-  deleteTaskCard(event);
-  checkIfChecked();
-  checkIfUrgent();
-  checkIfDeleteIsActive();
-  markUrgent(event);
-  addTaskListsToStorage(taskLists);
-  // addTasksOnLoad();
-})
 
 function markUrgent(event) {
   if (event.target.classList.contains('urgent') && !event.target.classList.contains('active')) {
@@ -87,31 +105,6 @@ function markUrgent(event) {
     addTaskListsToStorage(taskLists);
   }
 }
-
-
-plusBtn.addEventListener('click', function() {
-  addTaskItem();
-  enableTaskListBtn();
-})
-taskItemBox.addEventListener('click', function(event) {
-  deleteTaskItem(event);
-})
-
-taskItemInput.addEventListener('keyup', activatePlusBtn)
-taskListBtn.addEventListener('click', function() {
-  addTasksToStorage();
-  clearForm();
-  checkIfDeleteIsActive();
-  checkIfUrgent();
-});
-taskForm.addEventListener('keyup', enableClearBtn)
-clearAllBtn.addEventListener('click', clearForm)
-
-disableAllButtons();
-checkStorage();
-addTasksOnLoad();
-checkIfDeleteIsActive();
-checkIfUrgent()
 
 function checkIfChecked() {
   var allCheckBoxes = document.querySelectorAll('input[type="checkbox"]');
@@ -136,7 +129,6 @@ function changeCheckedStatus(event) {
         }
       }
     }
-    // event.target.disabled = true;
   }
 }
 
@@ -165,19 +157,6 @@ function disableAllButtons() {
   })
   filterBtn.disabled = false;
 }
-
-// function addTaskCard(id) {
-//   noTasksMsg.remove();
-//   var allTaskItems = document.querySelectorAll('.task-p');
-//   var checklistHTML = '';
-//   allTaskItems.forEach(function(task){
-//     checklistHTML += `<div class="check-pair">
-//       <input class="checkbox" type="checkbox"><p>${task.innerText}</p>
-//     </div>`;
-//   });
-//   var taskCard = makeTaskCard(id, taskTitleInput.value, checklistHTML);
-//   tasksListsSection.insertAdjacentHTML('afterbegin', taskCard);
-// }
 
 function makeTaskCard(id, title, checklistHTML) {
   var taskCard = `<div id=${id} class="task-card">
@@ -210,6 +189,7 @@ function checkStorage() {
 }
 
 function populateCards(taskLists) {
+  tasksListsSection.innerHTML = '';
   for (var i = 0; i < taskLists.length; i++) {
     var checklistHTML = '';
     var taskItems = taskLists[i].tasks;
@@ -234,26 +214,8 @@ function populateCards(taskLists) {
 
 function addTasksOnLoad() {
   if (localStorage.getItem('task lists') !== '[]' && localStorage.getItem('task lists') !== null) {
-    tasksListsSection.innerHTML = ''
-    //can replace with populate cards
-    for (var i = 0; i < taskLists.length; i++) {
-      var checklistHTML = '';
-      var taskItems = taskLists[i].tasks;
-      for (var j = 0; j < taskItems.length; j++) {
-        var taskId = taskItems[j].id;
-        taskItems[j] = new Task(taskId, taskItems[j].content, taskItems[j].completed);
-        var checkedStatus = '';
-        if (taskItems[j].completed === true) {
-          checkedStatus = `checked="checked"`
-        }
-        checklistHTML += `<div class="check-pair">
-          <input id=${taskId} class="checkbox" type="checkbox" ${checkedStatus}><p>${taskItems[j].content}</p>
-        </div>`;
-      }
-      var taskCard = makeTaskCard(taskLists[i].id, taskLists[i].title, checklistHTML);
-      tasksListsSection.insertAdjacentHTML('afterbegin', taskCard);
-      checkIfChecked();
-    }
+    // tasksListsSection.innerHTML = ''
+    populateCards(taskLists);
   }
 
 }
