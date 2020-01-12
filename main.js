@@ -1,21 +1,17 @@
-var taskItemBox = document.querySelector('.task-item-box');
-var taskItemInput = document.getElementById('task-item-input');
-var taskTitleInput = document.getElementById('task-title-input')
-var plusBtn = document.getElementById('add-task-btn');
-var taskForm = document.querySelector('form');
-var taskListBtn = document.getElementById('make-task-list-btn');
-var noTasksMsg = document.getElementById('no-tasks-msg');
-var tasksListsSection = document.querySelector('.task-lists-column');
 var clearAllBtn = document.getElementById('clear-all-btn');
 var filterBtn = document.getElementById('filter-btn');
+var noTasksMsg = document.getElementById('no-tasks-msg');
+var plusBtn = document.getElementById('add-task-btn');
 var searchBar = document.getElementById('search-bar');
+var taskForm = document.querySelector('form');
+var taskItemBox = document.querySelector('.task-item-box');
+var taskItemInput = document.getElementById('task-item-input');
+var taskListBtn = document.getElementById('make-task-list-btn');
 var taskLists = [];
+var tasksListsSection = document.querySelector('.task-lists-column');
+var taskTitleInput = document.getElementById('task-title-input')
 
-disableAllButtons();
-checkStorage();
-addTasksOnLoad();
-checkIfDeleteIsActive();
-checkIfUrgent();
+fireOnLoad();
 
 filterBtn.addEventListener('click', filterByUrgency);
 searchBar.addEventListener('keyup', searchTasksOnDOM)
@@ -90,6 +86,14 @@ function filterByUrgency() {
     populateCards(taskLists);
     filterBtn.classList.remove('active');
   }
+}
+
+function fireOnLoad() {
+  disableAllButtons();
+  checkStorage();
+  addTasksOnLoad();
+  checkIfDeleteIsActive();
+  checkIfUrgent();
 }
 
 function markUrgent(event) {
