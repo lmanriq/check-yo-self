@@ -96,6 +96,20 @@ function changeCheckedStatus(event) {
   }
 }
 
+function checkIfAllChecked(allChecked, btn) {
+  if (allChecked) {
+    btn.disabled = false;
+    btn.classList.add('active');
+    btn.innerHTML = `<img class="delete delete-img" src="assets/delete-active.svg" alt="delete button">
+    <p class="delete">DELETE</p>`
+  } else {
+    btn.disabled = true;
+    btn.classList.remove('active');
+    btn.innerHTML = `<img class="delete delete-img" src="assets/delete.svg" alt="delete button">
+    <p class="delete">DELETE</p>`
+  }
+}
+
 function checkIfChecked() {
   var allCheckBoxes = document.querySelectorAll('input[type="checkbox"]');
   for (var i = 0; i < allCheckBoxes.length; i++) {
@@ -119,17 +133,7 @@ function checkIfDeleteIsActive() {
         allChecked = false;
       }
     }
-    if (allChecked) {
-      deleteBtn.disabled = false;
-      deleteBtn.classList.add('active');
-      deleteBtn.innerHTML = `<img class="delete delete-img" src="assets/delete-active.svg" alt="delete button">
-      <p class="delete">DELETE</p>`
-    } else {
-      deleteBtn.disabled = true;
-      deleteBtn.classList.remove('active');
-      deleteBtn.innerHTML = `<img class="delete delete-img" src="assets/delete.svg" alt="delete button">
-      <p class="delete">DELETE</p>`
-    }
+    checkIfAllChecked(allChecked, deleteBtn);
   }
 }
 
