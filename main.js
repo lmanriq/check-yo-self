@@ -52,16 +52,17 @@ function filterByUrgency() {
     checkIfUrgent();
     filterBtn.classList.remove('active');
   }
+  checkIfDeleteIsActive();
 }
 
 tasksListsSection.addEventListener('click', function(event) {
   changeCheckedStatus(event);
   deleteTaskCard(event);
   checkIfChecked();
-  markUrgent(event);
-  checkIfDeleteIsActive();
   checkIfUrgent();
-  // addTaskListsToStorage(taskLists);
+  checkIfDeleteIsActive();
+  markUrgent(event);
+  addTaskListsToStorage(taskLists);
   // addTasksOnLoad();
 })
 
