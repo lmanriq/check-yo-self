@@ -7,25 +7,85 @@ var taskListBtn = document.getElementById('make-task-list-btn');
 var noTasksMsg = document.getElementById('no-tasks-msg');
 var tasksListsSection = document.querySelector('.task-lists-column');
 var clearAllBtn = document.getElementById('clear-all-btn');
+var filterBtn = document.getElementById('filter-btn');
 var taskLists = [];
 
-tasksListsSection.addEventListener('click', function() {
-  changeCheckedStatus();
-  addTaskListsToStorage();
+filterBtn.addEventListener('click', filterByUrgency)
+
+//
+// var urgentTasks = [];
+// for (var i = 0; i < taskLists.length; i++) {
+//   var urgentBox = allTaskCards[i].querySelector('.urgent-box');
+//   if (urgentBox.classList.contains('active')) {
+//     urgentCards.push(allTaskCards[i]);
+//   }
+// }
+
+// checkListHTML = '';
+// console.log(card.tasks)
+// // card.tasks.forEach(function(task) {
+// //   if (task.completed === true) {
+// //     checkedStatus = `checked="checked"`
+// //   }
+// //   checklistHTML += `<div class="check-pair">
+// //     <input id=${task.id} class="checkbox" type="checkbox" ${checkedStatus}><p>${task.content}</p>
+// //   </div>`;
+// // })
+// // makeTaskCard(card.id, card.title, checklistHTML)
+
+function filterByUrgency() {
+  var urgentTaskLists = [];
+  for (var i = 0; i < taskLists.length; i++) {
+    if (taskLists[i].urgent) {
+      urgentTaskLists.push(taskLists[i]);
+    }
+  }
+  if (!filterBtn.classList.contains('active')) {
+    tasksListsSection.innerHTML = '';
+    console.log(urgentTaskLists);
+    populateCards(urgentTaskLists);
+    checkIfUrgent();
+    filterBtn.classList.add('active');
+  } else {
+    tasksListsSection.innerHTML = '';
+    populateCards(taskLists);
+    checkIfUrgent();
+    filterBtn.classList.remove('active');
+  }
+}
+
+tasksListsSection.addEventListener('click', function(event) {
+  changeCheckedStatus(event);
   deleteTaskCard(event);
   checkIfChecked();
+  markUrgent(event);
+  checkIfDeleteIsActive();
+  checkIfUrgent();
+  // addTaskListsToStorage(taskLists);
   // addTasksOnLoad();
 })
 
-tasksListsSection.addEventListener('click', function() {
-  checkIfDeleteIsActive()
-})
+function markUrgent(event) {
+  if (event.target.classList.contains('urgent') && !event.target.classList.contains('active')) {
+    event.target.classList.add('active');
+    var targetCard = event.target.closest('.task-card');
+    for (var i = 0; i < taskLists.length; i++) {
+      if (taskLists[i].id == targetCard.id) {
+        taskLists[i].updateToDo(taskLists[i].title, true);
+        // taskLists[i].saveToStorage();
+      }
+    }
+    console.log(taskLists);
+    addTaskListsToStorage(taskLists);
+  }
+}
+
 
 plusBtn.addEventListener('click', function() {
   addTaskItem();
   enableTaskListBtn();
 })
-taskItemBox.addEventListener('click', function() {
+taskItemBox.addEventListener('click', function(event) {
   deleteTaskItem(event);
 })
 
@@ -34,6 +94,7 @@ taskListBtn.addEventListener('click', function() {
   addTasksToStorage();
   clearForm();
   checkIfDeleteIsActive();
+  checkIfUrgent();
 });
 taskForm.addEventListener('keyup', enableClearBtn)
 clearAllBtn.addEventListener('click', clearForm)
@@ -42,6 +103,7 @@ disableAllButtons();
 checkStorage();
 addTasksOnLoad();
 checkIfDeleteIsActive();
+checkIfUrgent()
 
 function checkIfChecked() {
   var allCheckBoxes = document.querySelectorAll('input[type="checkbox"]');
@@ -52,11 +114,11 @@ function checkIfChecked() {
   }
 }
 
-function addTaskListsToStorage() {
+function addTaskListsToStorage(taskLists) {
   localStorage.setItem('task lists', JSON.stringify(taskLists));
 }
 
-function changeCheckedStatus() {
+function changeCheckedStatus(event) {
   if (event.target.classList.contains('checkbox')) {
     for (var i = 0; i < taskLists.length; i++) {
       for (var j = 0; j < taskLists[i].tasks.length; j++) {
@@ -93,6 +155,7 @@ function disableAllButtons() {
   buttons.forEach(function(button) {
     button.disabled = true;
   })
+  filterBtn.disabled = false;
 }
 
 // function addTaskCard(id) {
@@ -115,9 +178,9 @@ function makeTaskCard(id, title, checklistHTML) {
     ${checklistHTML}
     </div>
     <div class="card-footer">
-      <div class="urgent-box">
-        <img src="assets/urgent.svg" alt="urgent icon">
-        <p>URGENT</p>
+      <div class="urgent urgent-box">
+        <img class="urgent" src="assets/urgent.svg" alt="urgent icon">
+        <p class="urgent">URGENT</p>
       </div>
       <button class="delete task-list-delete">
         <img class="delete delete-img" src="assets/delete.svg" alt="delete button">
@@ -133,16 +196,36 @@ function checkStorage() {
     noTasksMsg.remove();
     taskLists = JSON.parse(localStorage.getItem('task lists'));
     for (var g = 0; g < taskLists.length; g++) {
-      var listId = taskLists[g].id;
-      var listTasks = taskLists[g].tasks;
-      taskLists[g] = new ToDoList(listId, taskLists[g].title, listTasks);
+      taskLists[g] = new ToDoList(taskLists[g].id, taskLists[g].title, taskLists[g].urgent, taskLists[g].tasks);
     }
+  }
+}
+
+function populateCards(taskLists) {
+  for (var i = 0; i < taskLists.length; i++) {
+    var checklistHTML = '';
+    var taskItems = taskLists[i].tasks;
+    for (var j = 0; j < taskItems.length; j++) {
+      var taskId = taskItems[j].id;
+      taskItems[j] = new Task(taskId, taskItems[j].content, taskItems[j].completed);
+      var checkedStatus = '';
+      if (taskItems[j].completed === true) {
+        checkedStatus = `checked="checked"`
+      }
+      checklistHTML += `<div class="check-pair">
+        <input id=${taskId} class="checkbox" type="checkbox" ${checkedStatus}><p>${taskItems[j].content}</p>
+      </div>`;
+    }
+    var taskCard = makeTaskCard(taskLists[i].id, taskLists[i].title, checklistHTML);
+    tasksListsSection.insertAdjacentHTML('afterbegin', taskCard);
+    checkIfChecked();
   }
 }
 
 function addTasksOnLoad() {
   if (localStorage.getItem('task lists') !== '[]' && localStorage.getItem('task lists') !== null) {
     tasksListsSection.innerHTML = ''
+    //can replace with populate cards
     for (var i = 0; i < taskLists.length; i++) {
       var checklistHTML = '';
       var taskItems = taskLists[i].tasks;
@@ -174,7 +257,7 @@ function addTasksToStorage() {
     taskId += 'a';
     taskItems.push(new Task(taskId, task.innerText, false));
   })
-  var toDo = new ToDoList(id, taskTitleInput.value, taskItems);
+  var toDo = new ToDoList(id, taskTitleInput.value, false, taskItems);
   toDo.saveToStorage();
   // addTaskCard(id);
   addTasksOnLoad();
@@ -206,6 +289,38 @@ function deleteTaskItem(event) {
 function checkIfNoMoreCards() {
   if (!tasksListsSection.innerHTML) {
     tasksListsSection.innerHTML = `<h3 id="no-tasks-msg">No tasks yet! Create a new task list to get started.</h3>`
+  }
+}
+
+// function checkIfUrgent() {
+//   var allTaskCards = document.querySelectorAll('.task-card');
+//   for (var t = 0; t < allTaskCards.length; t++) {
+//     var cardFooter = allTaskCards[t].childNodes[allTaskCards[t].childNodes.length - 2];
+//     var urgentBox = cardFooter.childNodes[1];
+//     var matched = '';
+//     allTaskCards[t].id ===
+//     for (var i = 0; i < taskLists.length; i++) {
+//       if (taskLists[i].urgent === true) {
+//
+//       }
+//     }
+//   }
+// }
+
+function checkIfUrgent() {
+  for (var i = 0; i < taskLists.length; i++) {
+    if (taskLists[i].urgent === true) {
+      var allTaskCards = document.querySelectorAll('.task-card');
+      for (var j = 0; j < allTaskCards.length; j++) {
+        if (taskLists[i].id == allTaskCards[j].id) {
+          var urgentBox = allTaskCards[j].querySelector('.urgent-box');
+          urgentBox.innerHTML = `<img class="urgent" src="assets/urgent-active.svg" alt="urgent icon">
+          <p class="urgent">URGENT</p>`
+          urgentBox.classList.add('active');
+          allTaskCards[j].classList.add('urgent-card');
+        }
+      }
+    }
   }
 }
 
