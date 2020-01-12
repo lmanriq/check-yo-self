@@ -17,6 +17,10 @@ tasksListsSection.addEventListener('click', function() {
   // addTasksOnLoad();
 })
 
+tasksListsSection.addEventListener('click', function() {
+  checkIfDeleteIsActive()
+})
+
 plusBtn.addEventListener('click', function() {
   addTaskItem();
   enableTaskListBtn();
@@ -29,11 +33,15 @@ taskItemInput.addEventListener('keyup', activatePlusBtn)
 taskListBtn.addEventListener('click', function() {
   addTasksToStorage();
   clearForm();
+  checkIfDeleteIsActive();
 });
 taskForm.addEventListener('keyup', enableClearBtn)
 clearAllBtn.addEventListener('click', clearForm)
 
 disableAllButtons();
+checkStorage();
+addTasksOnLoad();
+checkIfDeleteIsActive();
 
 function checkIfChecked() {
   var allCheckBoxes = document.querySelectorAll('input[type="checkbox"]');
@@ -58,7 +66,7 @@ function changeCheckedStatus() {
         }
       }
     }
-    event.target.disabled = true;
+    // event.target.disabled = true;
   }
 }
 
@@ -87,22 +95,18 @@ function disableAllButtons() {
   })
 }
 
-function addTaskCard(id) {
-  noTasksMsg.remove();
-  var allTaskItems = document.querySelectorAll('.task-p');
-  var checklistHTML = '';
-  allTaskItems.forEach(function(task){
-    checklistHTML += `<div class="check-pair">
-      <input class="checkbox" type="checkbox"><p>${task.innerText}</p>
-    </div>`;
-  });
-  var taskCard = makeTaskCard(id, taskTitleInput.value, checklistHTML);
-  tasksListsSection.insertAdjacentHTML('afterbegin', taskCard);
-}
-
-checkStorage();
-addTasksOnLoad();
-
+// function addTaskCard(id) {
+//   noTasksMsg.remove();
+//   var allTaskItems = document.querySelectorAll('.task-p');
+//   var checklistHTML = '';
+//   allTaskItems.forEach(function(task){
+//     checklistHTML += `<div class="check-pair">
+//       <input class="checkbox" type="checkbox"><p>${task.innerText}</p>
+//     </div>`;
+//   });
+//   var taskCard = makeTaskCard(id, taskTitleInput.value, checklistHTML);
+//   tasksListsSection.insertAdjacentHTML('afterbegin', taskCard);
+// }
 
 function makeTaskCard(id, title, checklistHTML) {
   var taskCard = `<div id=${id} class="task-card">
@@ -115,17 +119,17 @@ function makeTaskCard(id, title, checklistHTML) {
         <img src="assets/urgent.svg" alt="urgent icon">
         <p>URGENT</p>
       </div>
-      <div class="delete task-list-delete">
-        <img class="delete" src="assets/delete.svg" alt="delete button">
-        <p>DELETE</p>
-      </div>
+      <button class="delete task-list-delete">
+        <img class="delete delete-img" src="assets/delete.svg" alt="delete button">
+        <p class="delete">DELETE</p>
+      </button>
     </div>
   </div>`
   return taskCard;
 }
 
 function checkStorage() {
-  if (localStorage.getItem('task lists')) {
+  if (localStorage.getItem('task lists') !== '[]' && localStorage.getItem('task lists') !== null) {
     noTasksMsg.remove();
     taskLists = JSON.parse(localStorage.getItem('task lists'));
     for (var g = 0; g < taskLists.length; g++) {
@@ -137,27 +141,28 @@ function checkStorage() {
 }
 
 function addTasksOnLoad() {
-  if (localStorage.getItem('task lists')) {
+  if (localStorage.getItem('task lists') !== '[]' && localStorage.getItem('task lists') !== null) {
     tasksListsSection.innerHTML = ''
-  }
-  for (var i = 0; i < taskLists.length; i++) {
-    var checklistHTML = '';
-    var taskItems = taskLists[i].tasks;
-    for (var j = 0; j < taskItems.length; j++) {
-      var taskId = taskItems[j].id;
-      taskItems[j] = new Task(taskId, taskItems[j].content, taskItems[j].completed);
-      var checkedStatus = '';
-      if (taskItems[j].completed === true) {
-        checkedStatus = `checked="checked"`
+    for (var i = 0; i < taskLists.length; i++) {
+      var checklistHTML = '';
+      var taskItems = taskLists[i].tasks;
+      for (var j = 0; j < taskItems.length; j++) {
+        var taskId = taskItems[j].id;
+        taskItems[j] = new Task(taskId, taskItems[j].content, taskItems[j].completed);
+        var checkedStatus = '';
+        if (taskItems[j].completed === true) {
+          checkedStatus = `checked="checked"`
+        }
+        checklistHTML += `<div class="check-pair">
+          <input id=${taskId} class="checkbox" type="checkbox" ${checkedStatus}><p>${taskItems[j].content}</p>
+        </div>`;
       }
-      checklistHTML += `<div class="check-pair">
-        <input id=${taskId} class="checkbox" type="checkbox" ${checkedStatus}><p>${taskItems[j].content}</p>
-      </div>`;
+      var taskCard = makeTaskCard(taskLists[i].id, taskLists[i].title, checklistHTML);
+      tasksListsSection.insertAdjacentHTML('afterbegin', taskCard);
+      checkIfChecked();
     }
-    var taskCard = makeTaskCard(taskLists[i].id, taskLists[i].title, checklistHTML);
-    tasksListsSection.insertAdjacentHTML('afterbegin', taskCard);
-    checkIfChecked();
   }
+
 }
 
 function addTasksToStorage() {
@@ -198,8 +203,42 @@ function deleteTaskItem(event) {
   }
 }
 
+function checkIfNoMoreCards() {
+  if (!tasksListsSection.innerHTML) {
+    tasksListsSection.innerHTML = `<h3 id="no-tasks-msg">No tasks yet! Create a new task list to get started.</h3>`
+  }
+}
+
+function checkIfDeleteIsActive() {
+  var allTaskCards = document.querySelectorAll('.task-card');
+  for (var t = 0; t < allTaskCards.length; t++) {
+    var allChecked = true;
+    var cardFooter = allTaskCards[t].childNodes[allTaskCards[t].childNodes.length - 2];
+    var deleteBtn = cardFooter.childNodes[3];
+    var cardList = allTaskCards[t].querySelector('.card-list-box')
+    // first and last nodes are text
+    for (var i = 1; i < cardList.childNodes.length - 1; i++) {
+      //Select the checkbox input child node
+      if (!cardList.childNodes[i].childNodes[1].checked) {
+        allChecked = false;
+      }
+    }
+    if (allChecked) {
+      deleteBtn.disabled = false;
+      deleteBtn.classList.add('active');
+      deleteBtn.innerHTML = `<img class="delete delete-img" src="assets/delete-active.svg" alt="delete button">
+      <p class="delete">DELETE</p>`
+    } else {
+      deleteBtn.disabled = true;
+      deleteBtn.classList.remove('active');
+      deleteBtn.innerHTML = `<img class="delete delete-img" src="assets/delete.svg" alt="delete button">
+      <p class="delete">DELETE</p>`
+    }
+  }
+}
+
 function deleteTaskCard(event) {
-  if (event.target.classList.contains('delete')) {
+  if (event.target.classList.contains('delete') && !event.target.closest('button').disabled) {
     var targetCard = event.target.closest('.task-card');
     for (var i = 0; i < taskLists.length; i++) {
       if (taskLists[i].id == targetCard.id) {
@@ -208,4 +247,5 @@ function deleteTaskCard(event) {
       }
     }
   }
+  checkIfNoMoreCards();
 }
