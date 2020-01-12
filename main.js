@@ -3,6 +3,7 @@ var filterBtn = document.getElementById('filter-btn');
 var noTasksMsg = document.getElementById('no-tasks-msg');
 var plusBtn = document.getElementById('add-task-btn');
 var searchBar = document.getElementById('search-bar');
+var searchSelector = document.getElementById('search-selector');
 var taskForm = document.querySelector('form');
 var taskItemBox = document.querySelector('.task-item-box');
 var taskItemInput = document.getElementById('task-item-input');
@@ -312,16 +313,31 @@ function searchPartialString(zone, list, filteredLists) {
   }
 }
 
-function searchAllTasksOnDOM() {
-  removeAllCards();
-  if (searchBar.value) {
-    var filteredLists = [];
-    taskLists.forEach(function(list) {
-      list.tasks.forEach(function(task) {
-        searchPartialString(task.content, list, filteredLists);
-      })
-      searchPartialString(list.title, list, filteredLists);
+function searchLists(filteredLists) {
+  taskLists.forEach(function(list) {
+    searchPartialString(list.title, list, filteredLists);
+  })
+}
+
+function searchItems(filteredLists) {
+  taskLists.forEach(function(list) {
+    list.tasks.forEach(function(task) {
+      searchPartialString(task.content, list, filteredLists);
     })
+  })
+}
+
+function searchAllTasksOnDOM() {
+  var filteredLists = [];
+  if (searchBar.value && searchSelector.value === 'all') {
+    searchLists(filteredLists);
+    searchItems(filteredLists);
+    populateCards(filteredLists);
+  } else if (searchBar.value && searchSelector.value === 'title') {
+    searchLists(filteredLists);
+    populateCards(filteredLists);
+  } else if (searchBar.value && searchSelector.value === 'tasks') {
+    searchItems(filteredLists);
     populateCards(filteredLists);
   } else {
     populateCards(taskLists);
