@@ -333,11 +333,11 @@ function searchAllTasksOnDOM() {
     searchLists(filteredLists);
     searchItems(filteredLists);
     populateCards(filteredLists);
-  } else if (searchBar.value && searchSelector.value === 'task list') {
+  } else if (searchBar.value && searchSelector.value === 'title') {
     var filteredTasks = [];
     searchLists(filteredTasks);
     populateCards(filteredTasks);
-  } else if (searchBar.value && searchSelector.value === 'task items') {
+  } else if (searchBar.value && searchSelector.value === 'tasks') {
     var filteredItems = [];
     searchItems(filteredItems);
     populateCards(filteredItems);
