@@ -32,15 +32,16 @@ img {
 }
 
 header,
-button {
+.task-buttons,
+.add-button {
   background-color: #1f1f3d;
   color: #fff;
 }
 
-/* button:active:hover {
+.task-buttons:hover {
   border: 1px solid #782616;
   background-color: #ef4a23;
-} */
+}
 
 header {
   width: 100%;
@@ -205,6 +206,14 @@ h2 {
 .urgent-box,
 .delete {
   text-align: center;
+}
+
+button.delete {
+  border: none;
+}
+
+svg {
+  background-color: #f00;
 }
 
 .delete.active {
