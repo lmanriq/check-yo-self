@@ -12,16 +12,37 @@ var taskLists = [];
 
 filterBtn.addEventListener('click', filterByUrgency)
 
+//
+// var urgentTasks = [];
+// for (var i = 0; i < taskLists.length; i++) {
+//   var urgentBox = allTaskCards[i].querySelector('.urgent-box');
+//   if (urgentBox.classList.contains('active')) {
+//     urgentCards.push(allTaskCards[i]);
+//   }
+// }
+
+// checkListHTML = '';
+// console.log(card.tasks)
+// // card.tasks.forEach(function(task) {
+// //   if (task.completed === true) {
+// //     checkedStatus = `checked="checked"`
+// //   }
+// //   checklistHTML += `<div class="check-pair">
+// //     <input id=${task.id} class="checkbox" type="checkbox" ${checkedStatus}><p>${task.content}</p>
+// //   </div>`;
+// // })
+// // makeTaskCard(card.id, card.title, checklistHTML)
+
 function filterByUrgency() {
-  var allTaskCards = document.querySelectorAll('.task-card');
-  var urgentCards = [];
-  for (var i = 0; i < allTaskCards.length; i++) {
-    var urgentBox = allTaskCards[i].querySelector('.urgent-box');
-    if (urgentBox.classList.contains('active')) {
-      urgentCards.push(allTaskCards[i]);
+  var urgentTaskLists = [];
+  for (var i = 0; i < taskLists.length; i++) {
+    if (taskLists.urgent) {
+      urgentTaskLists.push(taskLists[i]);
     }
   }
-  console.log(urgentCards);
+  tasksListsSection.innerHTML = '';
+
+  populateCards(urgentTaskLists);
 }
 
 tasksListsSection.addEventListener('click', function(event) {
@@ -171,9 +192,31 @@ function checkStorage() {
   }
 }
 
+function populateCards(taskLists) {
+  for (var i = 0; i < taskLists.length; i++) {
+    var checklistHTML = '';
+    var taskItems = taskLists[i].tasks;
+    for (var j = 0; j < taskItems.length; j++) {
+      var taskId = taskItems[j].id;
+      taskItems[j] = new Task(taskId, taskItems[j].content, taskItems[j].completed);
+      var checkedStatus = '';
+      if (taskItems[j].completed === true) {
+        checkedStatus = `checked="checked"`
+      }
+      checklistHTML += `<div class="check-pair">
+        <input id=${taskId} class="checkbox" type="checkbox" ${checkedStatus}><p>${taskItems[j].content}</p>
+      </div>`;
+    }
+    var taskCard = makeTaskCard(taskLists[i].id, taskLists[i].title, checklistHTML);
+    tasksListsSection.insertAdjacentHTML('afterbegin', taskCard);
+    checkIfChecked();
+  }
+}
+
 function addTasksOnLoad() {
   if (localStorage.getItem('task lists') !== '[]' && localStorage.getItem('task lists') !== null) {
     tasksListsSection.innerHTML = ''
+    //can replace with populate cards
     for (var i = 0; i < taskLists.length; i++) {
       var checklistHTML = '';
       var taskItems = taskLists[i].tasks;
