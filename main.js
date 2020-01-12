@@ -36,13 +36,14 @@ filterBtn.addEventListener('click', filterByUrgency)
 function filterByUrgency() {
   var urgentTaskLists = [];
   for (var i = 0; i < taskLists.length; i++) {
-    if (taskLists.urgent) {
+    if (taskLists[i].urgent) {
       urgentTaskLists.push(taskLists[i]);
     }
   }
   tasksListsSection.innerHTML = '';
-
+  console.log(urgentTaskLists);
   populateCards(urgentTaskLists);
+  checkIfUrgent();
 }
 
 tasksListsSection.addEventListener('click', function(event) {
