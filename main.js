@@ -8,30 +8,10 @@ var noTasksMsg = document.getElementById('no-tasks-msg');
 var tasksListsSection = document.querySelector('.task-lists-column');
 var clearAllBtn = document.getElementById('clear-all-btn');
 var filterBtn = document.getElementById('filter-btn');
+var searchBar = document.getElementById('search-bar')
 var taskLists = [];
 
 filterBtn.addEventListener('click', filterByUrgency)
-
-//
-// var urgentTasks = [];
-// for (var i = 0; i < taskLists.length; i++) {
-//   var urgentBox = allTaskCards[i].querySelector('.urgent-box');
-//   if (urgentBox.classList.contains('active')) {
-//     urgentCards.push(allTaskCards[i]);
-//   }
-// }
-
-// checkListHTML = '';
-// console.log(card.tasks)
-// // card.tasks.forEach(function(task) {
-// //   if (task.completed === true) {
-// //     checkedStatus = `checked="checked"`
-// //   }
-// //   checklistHTML += `<div class="check-pair">
-// //     <input id=${task.id} class="checkbox" type="checkbox" ${checkedStatus}><p>${task.content}</p>
-// //   </div>`;
-// // })
-// // makeTaskCard(card.id, card.title, checklistHTML)
 
 function filterByUrgency() {
   var urgentTaskLists = [];
@@ -40,19 +20,14 @@ function filterByUrgency() {
       urgentTaskLists.push(taskLists[i]);
     }
   }
+  tasksListsSection.innerHTML = '';
   if (!filterBtn.classList.contains('active')) {
-    tasksListsSection.innerHTML = '';
-    console.log(urgentTaskLists);
     populateCards(urgentTaskLists);
-    checkIfUrgent();
     filterBtn.classList.add('active');
   } else {
-    tasksListsSection.innerHTML = '';
     populateCards(taskLists);
-    checkIfUrgent();
     filterBtn.classList.remove('active');
   }
-  checkIfDeleteIsActive();
 }
 
 tasksListsSection.addEventListener('click', function(event) {
@@ -73,7 +48,6 @@ function markUrgent(event) {
     for (var i = 0; i < taskLists.length; i++) {
       if (taskLists[i].id == targetCard.id) {
         taskLists[i].updateToDo(taskLists[i].title, true);
-        // taskLists[i].saveToStorage();
       }
     }
     console.log(taskLists);
@@ -220,6 +194,8 @@ function populateCards(taskLists) {
     var taskCard = makeTaskCard(taskLists[i].id, taskLists[i].title, checklistHTML);
     tasksListsSection.insertAdjacentHTML('afterbegin', taskCard);
     checkIfChecked();
+    checkIfUrgent();
+    checkIfDeleteIsActive();
   }
 }
 
@@ -293,20 +269,6 @@ function checkIfNoMoreCards() {
   }
 }
 
-// function checkIfUrgent() {
-//   var allTaskCards = document.querySelectorAll('.task-card');
-//   for (var t = 0; t < allTaskCards.length; t++) {
-//     var cardFooter = allTaskCards[t].childNodes[allTaskCards[t].childNodes.length - 2];
-//     var urgentBox = cardFooter.childNodes[1];
-//     var matched = '';
-//     allTaskCards[t].id ===
-//     for (var i = 0; i < taskLists.length; i++) {
-//       if (taskLists[i].urgent === true) {
-//
-//       }
-//     }
-//   }
-// }
 
 function checkIfUrgent() {
   for (var i = 0; i < taskLists.length; i++) {
