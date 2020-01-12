@@ -57,7 +57,11 @@ header {
   align-items: center;
   background-color: #c7d3d8;
   height: 1.3em;
-  width: 10em;
+  width: 12em;
+}
+
+.search-box select {
+  margin-left: 0.5em;
 }
 
 .search-box input {
