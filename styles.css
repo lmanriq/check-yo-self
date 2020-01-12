@@ -204,8 +204,9 @@ h2 {
 }
 
 .urgent-box,
-.delete {
+.task-list-delete {
   text-align: center;
+  font-size: 0.8em;
 }
 
 button.delete {
@@ -221,12 +222,16 @@ svg {
   color: #f00;
 }
 
-.urgent {
-  background-color: #ffe89d;
+.urgent-card {
   border: 2px solid #ffc30c;
 }
 
-.urgent .card-list-box {
+.urgent-card .card-list-box {
   border-top: 2px solid #ffc30c;
   border-bottom: 2px solid #ffc30c;
+}
+
+.urgent-card,
+.urgent-card .task-list-delete {
+  background-color: #ffe89d;
 }
