@@ -38,7 +38,8 @@ header,
   color: #fff;
 }
 
-.task-buttons:hover {
+.task-buttons:hover,
+#filter-btn.active {
   border: 1px solid #782616;
   background-color: #ef4a23;
 }

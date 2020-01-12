@@ -40,10 +40,18 @@ function filterByUrgency() {
       urgentTaskLists.push(taskLists[i]);
     }
   }
-  tasksListsSection.innerHTML = '';
-  console.log(urgentTaskLists);
-  populateCards(urgentTaskLists);
-  checkIfUrgent();
+  if (!filterBtn.classList.contains('active')) {
+    tasksListsSection.innerHTML = '';
+    console.log(urgentTaskLists);
+    populateCards(urgentTaskLists);
+    checkIfUrgent();
+    filterBtn.classList.add('active');
+  } else {
+    tasksListsSection.innerHTML = '';
+    populateCards(taskLists);
+    checkIfUrgent();
+    filterBtn.classList.remove('active');
+  }
 }
 
 tasksListsSection.addEventListener('click', function(event) {
