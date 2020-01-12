@@ -14,6 +14,8 @@ tasksListsSection.addEventListener('click', function(event) {
   deleteTaskCard(event);
   checkIfChecked();
   markUrgent(event);
+  checkIfDeleteIsActive();
+  checkIfUrgent();
   // addTaskListsToStorage(taskLists);
   // addTasksOnLoad();
 })
@@ -21,7 +23,6 @@ tasksListsSection.addEventListener('click', function(event) {
 function markUrgent(event) {
   if (event.target.classList.contains('urgent') && !event.target.classList.contains('active')) {
     event.target.classList.add('active');
-    // event.target.innerHTML = new HTML
     var targetCard = event.target.closest('.task-card');
     for (var i = 0; i < taskLists.length; i++) {
       if (taskLists[i].id == targetCard.id) {
@@ -34,9 +35,6 @@ function markUrgent(event) {
   }
 }
 
-tasksListsSection.addEventListener('click', function() {
-  checkIfDeleteIsActive()
-})
 
 plusBtn.addEventListener('click', function() {
   addTaskItem();
@@ -51,6 +49,7 @@ taskListBtn.addEventListener('click', function() {
   addTasksToStorage();
   clearForm();
   checkIfDeleteIsActive();
+  checkIfUrgent();
 });
 taskForm.addEventListener('keyup', enableClearBtn)
 clearAllBtn.addEventListener('click', clearForm)
@@ -59,6 +58,7 @@ disableAllButtons();
 checkStorage();
 addTasksOnLoad();
 checkIfDeleteIsActive();
+checkIfUrgent()
 
 function checkIfChecked() {
   var allCheckBoxes = document.querySelectorAll('input[type="checkbox"]');
@@ -221,6 +221,36 @@ function deleteTaskItem(event) {
 function checkIfNoMoreCards() {
   if (!tasksListsSection.innerHTML) {
     tasksListsSection.innerHTML = `<h3 id="no-tasks-msg">No tasks yet! Create a new task list to get started.</h3>`
+  }
+}
+
+// function checkIfUrgent() {
+//   var allTaskCards = document.querySelectorAll('.task-card');
+//   for (var t = 0; t < allTaskCards.length; t++) {
+//     var cardFooter = allTaskCards[t].childNodes[allTaskCards[t].childNodes.length - 2];
+//     var urgentBox = cardFooter.childNodes[1];
+//     var matched = '';
+//     allTaskCards[t].id ===
+//     for (var i = 0; i < taskLists.length; i++) {
+//       if (taskLists[i].urgent === true) {
+//
+//       }
+//     }
+//   }
+// }
+
+function checkIfUrgent() {
+  for (var i = 0; i < taskLists.length; i++) {
+    if (taskLists[i].urgent === true) {
+      var allTaskCards = document.querySelectorAll('.task-card');
+      for (var j = 0; j < allTaskCards.length; j++) {
+        if (taskLists[i].id == allTaskCards[j].id) {
+          allTaskCards[j].querySelector('.urgent-box').innerHTML = `<img class="urgent" src="assets/urgent-active.svg" alt="urgent icon">
+          <p class="urgent">URGENT</p>`
+          allTaskCards[j].classList.add('urgent-card');
+        }
+      }
+    }
   }
 }
 
