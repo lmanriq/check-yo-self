@@ -235,6 +235,18 @@ function fireOnLoad() {
   checkIfUrgent();
 }
 
+function generateChecklistHTML(taskItems) {
+  var checklistHTML = '';
+  for (var j = 0; j < taskItems.length; j++) {
+    taskItems[j] = new Task(taskItems[j].id, taskItems[j].content, taskItems[j].completed);
+    var checkedStatus = taskItems[j].completed ? `checked="checked"` : '';
+    checklistHTML += `<div class="check-pair">
+      <input id=${taskItems[j].id} class="checkbox" type="checkbox" ${checkedStatus}><p>${taskItems[j].content}</p>
+    </div>`;
+  }
+  return checklistHTML;
+}
+
 function makeTaskCard(id, title, checklistHTML) {
   var taskCard = `<div id=${id} class="task-card">
     <h2 class="card-title">${title}</h2>
@@ -272,19 +284,8 @@ function markUrgent(event) {
 function populateCards(taskLists) {
   tasksListsSection.innerHTML = '';
   for (var i = 0; i < taskLists.length; i++) {
-    var checklistHTML = '';
     var taskItems = taskLists[i].tasks;
-    for (var j = 0; j < taskItems.length; j++) {
-      var taskId = taskItems[j].id;
-      taskItems[j] = new Task(taskId, taskItems[j].content, taskItems[j].completed);
-      var checkedStatus = '';
-      if (taskItems[j].completed === true) {
-        checkedStatus = `checked="checked"`
-      }
-      checklistHTML += `<div class="check-pair">
-        <input id=${taskId} class="checkbox" type="checkbox" ${checkedStatus}><p>${taskItems[j].content}</p>
-      </div>`;
-    }
+    var checklistHTML = generateChecklistHTML(taskItems);
     var taskCard = makeTaskCard(taskLists[i].id, taskLists[i].title, checklistHTML);
     tasksListsSection.insertAdjacentHTML('afterbegin', taskCard);
     checkIfChecked();
