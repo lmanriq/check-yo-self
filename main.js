@@ -13,8 +13,24 @@ var taskTitleInput = document.getElementById('task-title-input')
 
 fireOnLoad();
 
+clearAllBtn.addEventListener('click', clearForm);
 filterBtn.addEventListener('click', filterByUrgency);
-searchBar.addEventListener('keyup', searchTasksOnDOM)
+plusBtn.addEventListener('click', function() {
+  addTaskItem();
+  enableTaskListBtn();
+});
+searchBar.addEventListener('keyup', searchTasksOnDOM);
+taskForm.addEventListener('keyup', enableClearBtn);
+taskItemBox.addEventListener('click', function(event) {
+  deleteTaskItem(event);
+});
+taskItemInput.addEventListener('keyup', activatePlusBtn);
+taskListBtn.addEventListener('click', function() {
+  addTasksToStorage();
+  clearForm();
+  checkIfDeleteIsActive();
+  checkIfUrgent();
+});
 tasksListsSection.addEventListener('click', function(event) {
   changeCheckedStatus(event);
   deleteTaskCard(event);
@@ -23,23 +39,7 @@ tasksListsSection.addEventListener('click', function(event) {
   checkIfDeleteIsActive();
   markUrgent(event);
   addTaskListsToStorage(taskLists);
-})
-plusBtn.addEventListener('click', function() {
-  addTaskItem();
-  enableTaskListBtn();
-})
-taskItemBox.addEventListener('click', function(event) {
-  deleteTaskItem(event);
-})
-taskItemInput.addEventListener('keyup', activatePlusBtn)
-taskListBtn.addEventListener('click', function() {
-  addTasksToStorage();
-  clearForm();
-  checkIfDeleteIsActive();
-  checkIfUrgent();
 });
-taskForm.addEventListener('keyup', enableClearBtn)
-clearAllBtn.addEventListener('click', clearForm)
 
 function removeAllCards() {
   var allCards = document.querySelectorAll('.task-card');
