@@ -310,6 +310,7 @@ function searchPartialString(zone, list, filteredLists) {
   if (searchTerm === zone.slice(0, searchTerm.length) && filteredLists.indexOf(list) === -1) {
     filteredLists.push(list);
   }
+  return filteredLists;
 }
 
 function searchAllTasksOnDOM() {
@@ -318,6 +319,7 @@ function searchAllTasksOnDOM() {
     taskLists.forEach(function(list) {
       list.tasks.forEach(function(task) {
         searchPartialString(task.content, list, filteredLists);
+        console.log(filteredLists);
       })
       searchPartialString(list.title, list, filteredLists);
     })
@@ -325,7 +327,6 @@ function searchAllTasksOnDOM() {
   } else {
     populateCards(taskLists);
   }
-  console.log(filteredLists)
 }
 
 function updateCheckedData(task, j) {
