@@ -175,12 +175,12 @@ function clearForm() {
 function deleteTaskCard(event) {
   if (event.target.classList.contains('delete') && !event.target.closest('button').disabled) {
     var targetCard = event.target.closest('.task-card');
-    for (var i = 0; i < taskLists.length; i++) {
-      if (taskLists[i].id == targetCard.id) {
-        targetCard.remove();
-        taskLists[i].deleteFromStorage();
-      }
+    function findList(list) {
+      return list.id == targetCard.id;
     }
+    var targetList = taskLists.find(findList);
+    targetCard.remove();
+    targetList.deleteFromStorage();
   }
   checkIfNoMoreCards();
 }
