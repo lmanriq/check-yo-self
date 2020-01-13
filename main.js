@@ -245,7 +245,7 @@ function generateChecklistHTML(taskItems) {
     taskItems[j] = new Task(taskItems[j].id, taskItems[j].content, taskItems[j].completed);
     var checkedStatus = taskItems[j].completed ? `checked="checked"` : '';
     checklistHTML += `<div class="check-pair">
-      <input id=${taskItems[j].id} class="checkbox" type="checkbox" ${checkedStatus}><p>${taskItems[j].content}</p>
+      <input id=${taskItems[j].id} class="checkbox" type="checkbox" ${checkedStatus}><input type="text" value=${taskItems[j].content}>
     </div>`;
   }
   return checklistHTML;
