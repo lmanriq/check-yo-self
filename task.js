@@ -4,8 +4,4 @@ class Task {
     this.content = content;
     this.completed = completed;
   }
-
-  markCompleted() {
-    this.completed = true;
-  }
 }
