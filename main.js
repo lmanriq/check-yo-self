@@ -89,13 +89,14 @@ function addTasksToStorage() {
 
 function changeCheckedStatus(event) {
   if (event.target.classList.contains('checkbox')) {
-    //select just the card being modified and loop through its tasks instead
-    //find other nested fors
-    for (var i = 0; i < taskLists.length; i++) {
-      for (var j = 0; j < taskLists[i].tasks.length; j++) {
-        updateCheckedData(taskLists[i], j);
-      }
+    var targetCard = event.target.closest('.task-card');
+    function findList(list) {
+      return list.id == targetCard.id;
     }
+    var targetList = taskLists.find(findList);
+    targetList.tasks.forEach(function(task) {
+      updateCheckedData(targetList, task)
+    })
   }
 }
 
@@ -145,7 +146,7 @@ function checkIfNoMoreCards() {
 
 function checkIfUrgent() {
   for (var i = 0; i < taskLists.length; i++) {
-    if (taskLists[i].urgent === true) {
+    if (taskLists[i].urgent) {
       var allTaskCards = document.querySelectorAll('.task-card');
       for (var j = 0; j < allTaskCards.length; j++) {
         activateUrgentIcon(taskLists[i], allTaskCards[j]);
@@ -338,9 +339,9 @@ function searchTasks() {
   }
 }
 
-function updateCheckedData(task, j) {
-  if (event.target.id === task.tasks[j].id) {
-    task.updateTask(event.target.id);
+function updateCheckedData(list, task) {
+  if (event.target.id === task.id) {
+    list.updateTask(event.target.id);
     event.target.disabled = true;
   }
 }
