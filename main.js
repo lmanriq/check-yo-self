@@ -124,8 +124,7 @@ function checkIfDeleteIsActive() {
   var allTaskCards = document.querySelectorAll('.task-card');
   for (var t = 0; t < allTaskCards.length; t++) {
     var allChecked = true;
-    var cardFooter = allTaskCards[t].childNodes[allTaskCards[t].childNodes.length - 2];
-    var deleteBtn = cardFooter.childNodes[3];
+    var deleteBtn = allTaskCards[t].querySelector('button');
     var cardList = allTaskCards[t].querySelector('.card-list-box')
     // first and last nodes are text
     for (var i = 1; i < cardList.childNodes.length - 1; i++) {
