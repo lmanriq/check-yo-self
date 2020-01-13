@@ -367,7 +367,19 @@ function updateCheckedData(list, task) {
 //   }
 // }
 
-
+function changeTaskItemClick(event) {
+  if (event.target.tagName !== 'INPUT' && event.target.tagName !== 'BUTTON' && event.target.closest('.task-card')) {
+    var targetCard = event.target.closest('.task-card');
+    function findList(list) {
+      return list.id == targetCard.id;
+    }
+    var targetList = taskLists.find(findList);
+    targetList.tasks.forEach(function(task) {
+      console.log(targetCard.querySelector(`[id='${task.id}b']`).value)
+      task.content = targetCard.querySelector(`[id='${task.id}b']`).value;
+    })
+  }
+}
 
 // function editTaskCard(event) {
 //   targetCard.addEventListener('click', changeTaskItemClick(targetCard, targetList, event));
