@@ -38,6 +38,7 @@ tasksListsSection.addEventListener('click', function(event) {
   markUrgent(event);
   checkIfUrgent();
   addTaskListsToStorage(taskLists);
+  editTaskCard(event);
 });
 
 function activatePlusBtn() {
@@ -343,4 +344,42 @@ function updateCheckedData(list, task) {
     list.updateTask(event.target.id);
     event.target.disabled = true;
   }
+}
+
+// if event.key === 'Enter' || event.target !== input
+// Find input checked pair ID
+// Find corresponding task list
+// Update task.content with input.value
+
+function changeTaskItemEnter(event) {
+  var targetCard = event.target.closest('.task-card');
+  function findList(list) {
+    return list.id == targetCard.id;
+  }
+  var targetList = taskLists.find(findList);
+  if (event.keyCode === 13) {
+    targetList.tasks.forEach(function(task) {
+      task.content = targetCard.querySelector(`#${task.id}`).value;
+    })
+  }
+}
+
+function changeTaskItemClick(event) {
+  var targetCard = event.target.closest('.task-card');
+  function findList(list) {
+    return list.id == targetCard.id;
+  }
+  var targetList = taskLists.find(findList);
+  if (event.target.tagName !== 'INPUT') {
+    targetList.tasks.forEach(function(task) {
+      console.log('input');
+      task.content = targetCard.querySelector(`#${task.id}`).value;
+      console.log(task.content)
+    })
+  }
+}
+
+function editTaskCard(event) {
+  targetCard.addEventListener('click', changeTaskItemClick(targetCard, targetList, event));
+  targetCard.addEventListener('keyup', changeTaskItemEnter(targetCard, targetList, event));
 }
