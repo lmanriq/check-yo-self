@@ -37,9 +37,12 @@ tasksListsSection.addEventListener('click', function(event) {
   checkIfDeleteIsActive();
   markUrgent(event);
   checkIfUrgent();
+  changeTaskItemClick(event);
   addTaskListsToStorage(taskLists);
-  editTaskCard(event);
 });
+
+// tasksListsSection.addEventListener('click', changeTaskItemClick(event));
+// tasksListsSection.addEventListener('keyup', changeTaskItemEnter(event));
 
 function activatePlusBtn() {
   plusBtn.disabled = !taskItemInput.value
@@ -241,7 +244,7 @@ function generateChecklistHTML(taskItems) {
     taskItems[j] = new Task(taskItems[j].id, taskItems[j].content, taskItems[j].completed);
     var checkedStatus = taskItems[j].completed ? `checked="checked"` : '';
     checklistHTML += `<div class="check-pair">
-      <input id=${taskItems[j].id} class="checkbox" type="checkbox" ${checkedStatus}><input type="text" value=${taskItems[j].content}>
+      <input id=${taskItems[j].id} class="checkbox" type="checkbox" ${checkedStatus}><input id="${taskItems[j].id}b" type="text" value=${taskItems[j].content}>
     </div>`;
   }
   return checklistHTML;
@@ -351,35 +354,22 @@ function updateCheckedData(list, task) {
 // Find corresponding task list
 // Update task.content with input.value
 
-function changeTaskItemEnter(event) {
-  var targetCard = event.target.closest('.task-card');
-  function findList(list) {
-    return list.id == targetCard.id;
-  }
-  var targetList = taskLists.find(findList);
-  if (event.keyCode === 13) {
-    targetList.tasks.forEach(function(task) {
-      task.content = targetCard.querySelector(`#${task.id}`).value;
-    })
-  }
-}
+// function changeTaskItemEnter(event) {
+//   if (event.keyCode === 13 && event.target.closest('.task-card')) {
+//     var targetCard = event.target.closest('.task-card');
+//     function findList(list) {
+//       return list.id == targetCard.id;
+//     }
+//     var targetList = taskLists.find(findList);
+//     targetList.tasks.forEach(function(task) {
+//       task.content = targetCard.querySelector(`#${task.id}`).value;
+//     })
+//   }
+// }
 
-function changeTaskItemClick(event) {
-  var targetCard = event.target.closest('.task-card');
-  function findList(list) {
-    return list.id == targetCard.id;
-  }
-  var targetList = taskLists.find(findList);
-  if (event.target.tagName !== 'INPUT') {
-    targetList.tasks.forEach(function(task) {
-      console.log('input');
-      task.content = targetCard.querySelector(`#${task.id}`).value;
-      console.log(task.content)
-    })
-  }
-}
 
-function editTaskCard(event) {
-  targetCard.addEventListener('click', changeTaskItemClick(targetCard, targetList, event));
-  targetCard.addEventListener('keyup', changeTaskItemEnter(targetCard, targetList, event));
-}
+
+// function editTaskCard(event) {
+//   targetCard.addEventListener('click', changeTaskItemClick(targetCard, targetList, event));
+//   targetCard.addEventListener('keyup', changeTaskItemEnter(targetCard, targetList, event));
+// }
