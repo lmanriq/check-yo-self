@@ -41,11 +41,7 @@ tasksListsSection.addEventListener('click', function(event) {
 });
 
 function activatePlusBtn() {
-  if (taskItemInput.value) {
-    plusBtn.disabled = false;
-  } else {
-    plusBtn.disabled = true;
-  }
+  plusBtn.disabled = !taskItemInput.value
 }
 
 function activateUrgentIcon(list, card) {
@@ -93,6 +89,8 @@ function addTasksToStorage() {
 
 function changeCheckedStatus(event) {
   if (event.target.classList.contains('checkbox')) {
+    //select just the card being modified and loop through its tasks instead
+    //find other nested fors
     for (var i = 0; i < taskLists.length; i++) {
       for (var j = 0; j < taskLists[i].tasks.length; j++) {
         updateCheckedData(taskLists[i], j);
@@ -103,24 +101,21 @@ function changeCheckedStatus(event) {
 
 function checkIfAllChecked(allChecked, btn) {
   if (allChecked) {
-    btn.disabled = false;
     btn.classList.add('active');
     btn.innerHTML = `<img class="delete delete-img" src="assets/delete-active.svg" alt="delete button">
     <p class="delete">DELETE</p>`
   } else {
-    btn.disabled = true;
     btn.classList.remove('active');
     btn.innerHTML = `<img class="delete delete-img" src="assets/delete.svg" alt="delete button">
     <p class="delete">DELETE</p>`
   }
+  btn.disabled = !allChecked;
 }
 
 function checkIfChecked() {
   var allCheckBoxes = document.querySelectorAll('input[type="checkbox"]');
   for (var i = 0; i < allCheckBoxes.length; i++) {
-    if (allCheckBoxes[i].checked) {
-      allCheckBoxes[i].disabled = true;
-    }
+    allCheckBoxes[i].disabled = allCheckBoxes[i].checked;
   }
 }
 
