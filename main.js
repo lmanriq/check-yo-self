@@ -41,11 +41,7 @@ tasksListsSection.addEventListener('click', function(event) {
 });
 
 function activatePlusBtn() {
-  if (taskItemInput.value) {
-    plusBtn.disabled = false;
-  } else {
-    plusBtn.disabled = true;
-  }
+  plusBtn.disabled = !taskItemInput.value
 }
 
 function activateUrgentIcon(list, card) {
@@ -93,34 +89,34 @@ function addTasksToStorage() {
 
 function changeCheckedStatus(event) {
   if (event.target.classList.contains('checkbox')) {
-    for (var i = 0; i < taskLists.length; i++) {
-      for (var j = 0; j < taskLists[i].tasks.length; j++) {
-        updateCheckedData(taskLists[i], j);
-      }
+    var targetCard = event.target.closest('.task-card');
+    function findList(list) {
+      return list.id == targetCard.id;
     }
+    var targetList = taskLists.find(findList);
+    targetList.tasks.forEach(function(task) {
+      updateCheckedData(targetList, task)
+    })
   }
 }
 
 function checkIfAllChecked(allChecked, btn) {
   if (allChecked) {
-    btn.disabled = false;
     btn.classList.add('active');
     btn.innerHTML = `<img class="delete delete-img" src="assets/delete-active.svg" alt="delete button">
     <p class="delete">DELETE</p>`
   } else {
-    btn.disabled = true;
     btn.classList.remove('active');
     btn.innerHTML = `<img class="delete delete-img" src="assets/delete.svg" alt="delete button">
     <p class="delete">DELETE</p>`
   }
+  btn.disabled = !allChecked;
 }
 
 function checkIfChecked() {
   var allCheckBoxes = document.querySelectorAll('input[type="checkbox"]');
   for (var i = 0; i < allCheckBoxes.length; i++) {
-    if (allCheckBoxes[i].checked) {
-      allCheckBoxes[i].disabled = true;
-    }
+    allCheckBoxes[i].disabled = allCheckBoxes[i].checked;
   }
 }
 
@@ -128,8 +124,7 @@ function checkIfDeleteIsActive() {
   var allTaskCards = document.querySelectorAll('.task-card');
   for (var t = 0; t < allTaskCards.length; t++) {
     var allChecked = true;
-    var cardFooter = allTaskCards[t].childNodes[allTaskCards[t].childNodes.length - 2];
-    var deleteBtn = cardFooter.childNodes[3];
+    var deleteBtn = allTaskCards[t].querySelector('button');
     var cardList = allTaskCards[t].querySelector('.card-list-box')
     // first and last nodes are text
     for (var i = 1; i < cardList.childNodes.length - 1; i++) {
@@ -150,7 +145,7 @@ function checkIfNoMoreCards() {
 
 function checkIfUrgent() {
   for (var i = 0; i < taskLists.length; i++) {
-    if (taskLists[i].urgent === true) {
+    if (taskLists[i].urgent) {
       var allTaskCards = document.querySelectorAll('.task-card');
       for (var j = 0; j < allTaskCards.length; j++) {
         activateUrgentIcon(taskLists[i], allTaskCards[j]);
@@ -179,12 +174,12 @@ function clearForm() {
 function deleteTaskCard(event) {
   if (event.target.classList.contains('delete') && !event.target.closest('button').disabled) {
     var targetCard = event.target.closest('.task-card');
-    for (var i = 0; i < taskLists.length; i++) {
-      if (taskLists[i].id == targetCard.id) {
-        targetCard.remove();
-        taskLists[i].deleteFromStorage();
-      }
+    function findList(list) {
+      return list.id == targetCard.id;
     }
+    var targetList = taskLists.find(findList);
+    targetCard.remove();
+    targetList.deleteFromStorage();
   }
   checkIfNoMoreCards();
 }
@@ -245,7 +240,7 @@ function generateChecklistHTML(taskItems) {
     taskItems[j] = new Task(taskItems[j].id, taskItems[j].content, taskItems[j].completed);
     var checkedStatus = taskItems[j].completed ? `checked="checked"` : '';
     checklistHTML += `<div class="check-pair">
-      <input id=${taskItems[j].id} class="checkbox" type="checkbox" ${checkedStatus}><p>${taskItems[j].content}</p>
+      <input id=${taskItems[j].id} class="checkbox" type="checkbox" ${checkedStatus}><input type="text" value=${taskItems[j].content}>
     </div>`;
   }
   return checklistHTML;
@@ -343,9 +338,9 @@ function searchTasks() {
   }
 }
 
-function updateCheckedData(task, j) {
-  if (event.target.id === task.tasks[j].id) {
-    task.updateTask(event.target.id);
+function updateCheckedData(list, task) {
+  if (event.target.id === task.id) {
+    list.updateTask(event.target.id);
     event.target.disabled = true;
   }
 }

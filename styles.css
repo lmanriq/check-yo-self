@@ -12,7 +12,7 @@ body {
 }
 
 main {
-  height: 53em;
+  height: 45em;
 }
 
 main,
@@ -177,6 +177,12 @@ h3 {
   height: auto;
   margin: 1em;
   width: 15em;
+}
+
+.task-card input {
+  border: none;
+  background-color: transparent;
+  font-size: 0.9em;
 }
 
 .card-list-box {
