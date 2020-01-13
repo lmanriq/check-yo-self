@@ -179,6 +179,12 @@ h3 {
   width: 15em;
 }
 
+.task-card input {
+  border: none;
+  background-color: transparent;
+  font-size: 0.9em;
+}
+
 .card-list-box {
   border-bottom: 2px solid #c7d3d8;
   border-top: 2px solid #c7d3d8;
