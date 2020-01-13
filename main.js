@@ -41,8 +41,6 @@ tasksListsSection.addEventListener('click', function(event) {
   addTaskListsToStorage(taskLists);
 });
 
-// tasksListsSection.addEventListener('click', changeTaskItemClick(event));
-// tasksListsSection.addEventListener('keyup', changeTaskItemEnter(event));
 
 function activatePlusBtn() {
   plusBtn.disabled = !taskItemInput.value
@@ -238,6 +236,8 @@ function fireOnLoad() {
   checkIfUrgent();
 }
 
+//This is where the list HTML is generated. The console log at the end shows the values that should be displayed, but only the last
+//input displays the change correctly
 function generateChecklistHTML(taskItems) {
   var checklistHTML = '';
   for (var j = 0; j < taskItems.length; j++) {
@@ -246,6 +246,7 @@ function generateChecklistHTML(taskItems) {
     checklistHTML += `<div class="check-pair">
       <input id=${taskItems[j].id} class="checkbox" type="checkbox" ${checkedStatus}><input id="${taskItems[j].id}b" type="text" value=${taskItems[j].content}>
     </div>`;
+    console.log(taskItems[j].content)
   }
   return checklistHTML;
 }
@@ -283,6 +284,7 @@ function markUrgent(event) {
   }
 }
 
+//this is where the task cards are created
 function populateCards(taskLists) {
   tasksListsSection.innerHTML = '';
   for (var i = 0; i < taskLists.length; i++) {
@@ -350,6 +352,7 @@ function updateCheckedData(list, task) {
 }
 
 //this works on the last item in the list only
+//all of the task contents are saved in local storage and parsed correctly, but only the last item of any list saves its new content for some reason
 function changeTaskItemClick(event) {
   if (event.target.tagName !== 'INPUT' && event.target.tagName !== 'BUTTON' && event.target.closest('.task-card')) {
     var targetCard = event.target.closest('.task-card');
