@@ -90,7 +90,6 @@ function addTasksToStorage() {
   })
   var toDo = new ToDoList(id, taskTitleInput.value, false, taskItems);
   toDo.saveToStorage();
-  // addTaskCard(id);
   addTasksOnLoad();
 }
 
