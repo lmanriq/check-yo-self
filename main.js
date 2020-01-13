@@ -20,7 +20,7 @@ plusBtn.addEventListener('click', function() {
   addTaskItem();
   enableTaskListBtn();
 });
-searchBar.addEventListener('keyup', searchAllTasksOnDOM);
+searchBar.addEventListener('keyup', searchTasks);
 taskForm.addEventListener('keyup', enableClearBtn);
 taskItemBox.addEventListener('click', function(event) {
   deleteTaskItem(event);
@@ -327,7 +327,7 @@ function searchItems(filteredLists) {
   })
 }
 
-function searchAllTasksOnDOM() {
+function searchTasks() {
   var filteredLists = [];
   if (searchBar.value && searchSelector.value === 'all') {
     searchLists(filteredLists);
