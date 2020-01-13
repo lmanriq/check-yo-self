@@ -36,9 +36,9 @@ tasksListsSection.addEventListener('click', function(event) {
   changeCheckedStatus(event);
   deleteTaskCard(event);
   checkIfChecked();
-  checkIfUrgent();
   checkIfDeleteIsActive();
   markUrgent(event);
+  checkIfUrgent();
   addTaskListsToStorage(taskLists);
 });
 
