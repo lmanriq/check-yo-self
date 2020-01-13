@@ -1,9 +1,7 @@
 var clearAllBtn = document.getElementById('clear-all-btn');
 var filterBtn = document.getElementById('filter-btn');
-var noTasksMsg = document.getElementById('no-tasks-msg');
 var plusBtn = document.getElementById('add-task-btn');
 var searchBar = document.getElementById('search-bar');
-var searchSelector = document.getElementById('search-selector');
 var taskForm = document.querySelector('form');
 var taskItemBox = document.querySelector('.task-item-box');
 var taskItemInput = document.getElementById('task-item-input');
@@ -20,7 +18,7 @@ plusBtn.addEventListener('click', function() {
   addTaskItem();
   enableTaskListBtn();
 });
-searchBar.addEventListener('keyup', searchAllTasksOnDOM);
+searchBar.addEventListener('keyup', searchTasks);
 taskForm.addEventListener('keyup', enableClearBtn);
 taskItemBox.addEventListener('click', function(event) {
   deleteTaskItem(event);
@@ -90,7 +88,6 @@ function addTasksToStorage() {
   })
   var toDo = new ToDoList(id, taskTitleInput.value, false, taskItems);
   toDo.saveToStorage();
-  // addTaskCard(id);
   addTasksOnLoad();
 }
 
@@ -163,6 +160,7 @@ function checkIfUrgent() {
 }
 
 function checkStorage() {
+  var noTasksMsg = document.getElementById('no-tasks-msg');
   if (localStorage.getItem('task lists') !== '[]' && localStorage.getItem('task lists') !== null) {
     noTasksMsg.remove();
     taskLists = JSON.parse(localStorage.getItem('task lists'));
@@ -327,7 +325,8 @@ function searchItems(filteredLists) {
   })
 }
 
-function searchAllTasksOnDOM() {
+function searchTasks() {
+  var searchSelector = document.getElementById('search-selector');
   var filteredLists = [];
   if (searchBar.value && searchSelector.value === 'all') {
     searchLists(filteredLists);
