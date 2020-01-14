@@ -18,7 +18,10 @@ plusBtn.addEventListener('click', function() {
   addTaskItem();
   enableTaskListBtn();
 });
-searchBar.addEventListener('keyup', searchTasks);
+searchBar.addEventListener('keyup', function() {
+  searchTasks();
+  searchUrgentTasks();
+});
 taskForm.addEventListener('keyup', enableClearBtn);
 taskItemBox.addEventListener('click', function(event) {
   deleteTaskItem(event);
@@ -271,13 +274,18 @@ function enableTaskListBtn() {
   }
 }
 
-function filterByUrgency() {
+function findUrgentLists() {
   var urgentTaskLists = [];
   for (var i = 0; i < taskLists.length; i++) {
     if (taskLists[i].urgent) {
       urgentTaskLists.push(taskLists[i]);
     }
   }
+  return urgentTaskLists;
+}
+
+function filterByUrgency() {
+  var urgentTaskLists = findUrgentLists();
   if (!filterBtn.classList.contains('active') && urgentTaskLists.length > 0) {
     populateCards(urgentTaskLists);
     filterBtn.classList.add('active');
@@ -373,34 +381,47 @@ function searchPartialString(zone, list, filteredLists) {
   }
 }
 
-function searchLists(filteredLists) {
-  taskLists.forEach(function(list) {
+function searchLists(filteredLists, mainList) {
+  mainList.forEach(function(list) {
     searchPartialString(list.title, list, filteredLists);
   })
 }
 
-function searchItems(filteredLists) {
-  taskLists.forEach(function(list) {
+function searchItems(filteredLists, mainList) {
+  mainList.forEach(function(list) {
     list.tasks.forEach(function(task) {
       searchPartialString(task.content, list, filteredLists);
     })
   })
 }
 
+function searchUrgentTasks() {
+  var searchSelector = document.getElementById('search-selector');
+  var urgentLists = findUrgentLists();
+  if (filterBtn.classList.contains('active') && searchBar.value) {
+    var filteredLists = [];
+    searchLists(filteredLists, urgentLists);
+    searchItems(filteredLists, urgentLists);
+    populateCards(filteredLists);
+  } else if (filterBtn.classList.contains('active') && !searchBar.value) {
+    populateCards(urgentLists);
+  }
+}
+
 function searchTasks() {
   var searchSelector = document.getElementById('search-selector');
   var filteredLists = [];
-  if (searchBar.value && searchSelector.value === 'all') {
-    searchLists(filteredLists);
-    searchItems(filteredLists);
+  if (!filterBtn.classList.contains('active') && searchBar.value && searchSelector.value === 'all') {
+    searchLists(filteredLists, taskLists);
+    searchItems(filteredLists, taskLists);
     populateCards(filteredLists);
-  } else if (searchBar.value && searchSelector.value === 'title') {
-    searchLists(filteredLists);
+  } else if (!filterBtn.classList.contains('active') && searchBar.value && searchSelector.value === 'title') {
+    searchLists(filteredLists, taskLists);
     populateCards(filteredLists);
-  } else if (searchBar.value && searchSelector.value === 'tasks') {
-    searchItems(filteredLists);
+  } else if (!filterBtn.classList.contains('active') && searchBar.value && searchSelector.value === 'tasks') {
+    searchItems(filteredLists, taskLists);
     populateCards(filteredLists);
-  } else {
+  } else if (!filterBtn.classList.contains('active')) {
     populateCards(taskLists);
   }
 }
