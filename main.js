@@ -42,16 +42,39 @@ tasksListsSection.addEventListener('click', function(event) {
 });
 
 tasksListsSection.addEventListener('keyup', function() {
-  activateSecondPlusBtn(event);
   changeTaskItem(event);
 });
+tasksListsSection.addEventListener('click', function(event) {
+  activateSecondPlusBtn(event);
+})
 
 function activateSecondPlusBtn(event) {
-  if (event.target.classList.contains('item-input-2')) {
-    var inputField = event.target;
-    var addTaskBtn = inputField.closest('.add-task-box').querySelector('.add-button-2');
-    addTaskBtn.disabled = !inputField.value;
+  if (event.target.classList.contains('add-button-2')) {
+    var targetCard = event.target.closest('.task-card');
+    function findList(list) {
+      return list.id == targetCard.id;
+    }
+    var targetList = taskLists.find(findList);
+    var inputField = targetCard.querySelector('.item-input-2')
+    var addTaskBtn = targetCard.querySelector('.add-button-2');
+    // addTaskBtn.disabled = !inputField.value;
+    var cardBox = targetCard.querySelector('.card-list-box')
+    var listLength = cardBox.childNodes.length - 2;
+    addNewTaskItem(targetCard, targetList, inputField, cardBox, listLength)
   }
+}
+
+function addNewTaskItem(targetCard, targetList, inputField, cardBox, listLength) {
+  var newItem = inputField.value;
+  var newId = targetCard.id;
+  for (var i = 0; i <= listLength; i ++) {
+    newId += 'a';
+  }
+  
+  var newHTML = `<div class="check-pair">
+    <input id=${newId} class="checkbox" type="checkbox"><input id="${newId}b" class="item-inputs" type="text" value="${newItem}">
+  </div>`;
+  cardBox.insertAdjacentHTML('beforeend', newHTML);
 }
 
 function activatePlusBtn() {
