@@ -278,8 +278,11 @@ function filterByUrgency() {
       urgentTaskLists.push(taskLists[i]);
     }
   }
-  if (!filterBtn.classList.contains('active')) {
+  if (!filterBtn.classList.contains('active') && urgentTaskLists.length > 0) {
     populateCards(urgentTaskLists);
+    filterBtn.classList.add('active');
+  } else if (!filterBtn.classList.contains('active') && urgentTaskLists.length === 0) {
+    tasksListsSection.innerHTML = `<h3>No urgent tasks yet!</h3>`
     filterBtn.classList.add('active');
   } else {
     populateCards(taskLists);
