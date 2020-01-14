@@ -37,9 +37,11 @@ tasksListsSection.addEventListener('click', function(event) {
   checkIfDeleteIsActive();
   markUrgent(event);
   checkIfUrgent();
-  changeTaskItemClick(event);
+  // changeTaskItemClick(event);
   addTaskListsToStorage(taskLists);
 });
+
+tasksListsSection.addEventListener('keyup', changeTaskItem);
 
 
 function activatePlusBtn() {
@@ -238,13 +240,15 @@ function fireOnLoad() {
 
 //This is where the list HTML is generated. The console log at the end shows the values that should be displayed, but only the last
 //input displays the change correctly
+//Select by class list instead of input
+//Edit local storage
 function generateChecklistHTML(taskItems) {
   var checklistHTML = '';
   for (var j = 0; j < taskItems.length; j++) {
     taskItems[j] = new Task(taskItems[j].id, taskItems[j].content, taskItems[j].completed);
     var checkedStatus = taskItems[j].completed ? `checked="checked"` : '';
     checklistHTML += `<div class="check-pair">
-      <input id=${taskItems[j].id} class="checkbox" type="checkbox" ${checkedStatus}><input id="${taskItems[j].id}b" type="text" value=${taskItems[j].content}>
+      <input id=${taskItems[j].id} class="checkbox" type="checkbox" ${checkedStatus}><input id="${taskItems[j].id}b" class="item-inputs" type="text" value="${taskItems[j].content}">
     </div>`;
     console.log(taskItems[j].content)
   }
@@ -253,7 +257,7 @@ function generateChecklistHTML(taskItems) {
 
 function makeTaskCard(id, title, checklistHTML) {
   var taskCard = `<div id=${id} class="task-card">
-    <h2 class="card-title">${title}</h2>
+    <input class="card-title" value="${title}">
     <div class="card-list-box">
     ${checklistHTML}
     </div>
@@ -280,7 +284,7 @@ function markUrgent(event) {
         taskLists[i].updateToDo(taskLists[i].title, true);
       }
     }
-    addTaskListsToStorage(taskLists);
+    // addTaskListsToStorage(taskLists);
   }
 }
 
@@ -351,19 +355,39 @@ function updateCheckedData(list, task) {
   }
 }
 
-//this works on the last item in the list only
-//all of the task contents are saved in local storage and parsed correctly, but only the last item of any list saves its new content for some reason
-function changeTaskItemClick(event) {
-  if (event.target.tagName !== 'INPUT' && event.target.tagName !== 'BUTTON' && event.target.closest('.task-card')) {
+
+function changeTaskItem(event) {
+  if (event.keyCode === 13 && (event.target.classList.contains('card-title') || event.target.classList.contains('item-inputs'))) {
     var targetCard = event.target.closest('.task-card');
+    var cardTitle = targetCard.querySelector('.card-title');
     function findList(list) {
       return list.id == targetCard.id;
     }
     var targetList = taskLists.find(findList);
     var targetIndex = taskLists.indexOf(targetList);
-    console.log(targetIndex);
-    targetList.tasks.forEach(function(task) {
-      task.content = targetCard.querySelector(`[id='${task.id}b']`).value;
-    })
+    taskLists[targetIndex].title = cardTitle.value;
+    console.log(taskLists[targetIndex].tasks)
+    for (var i = 0; i < targetList.tasks.length; i++) {
+      taskLists[targetIndex].tasks[i].content = targetCard.querySelector(`[id='${targetList.tasks[i].id}b']`).value
+    }
+    console.log(targetList.tasks);
+    addTaskListsToStorage(taskLists);
   }
 }
+//this works on the last item in the list only
+//all of the task contents are saved in local storage and parsed correctly, but only the last item of any list saves its new content for some reason
+// function changeTaskItemClick(event) {
+//   if (event.target.tagName !== 'INPUT' && event.target.tagName !== 'BUTTON' && event.target.closest('.task-card')) {
+//     var targetCard = event.target.closest('.task-card');
+//     function findList(list) {
+//       return list.id == targetCard.id;
+//     }
+//     var targetList = taskLists.find(findList);
+//     // var targetIndex = taskLists.indexOf(targetList);
+//     console.log(targetIndex);
+//     for (var i = 0; i < targetList.tasks.length; i++) {
+//       targetList.tasks[i].content = targetCard.querySelector(`[id='${targetList.tasks[i].id}b']`).value
+//     }
+//     // taskLists.splice(targetIndex, 1, targetList);
+//   }
+// }
