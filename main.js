@@ -30,6 +30,7 @@ taskListBtn.addEventListener('click', function() {
   checkIfUrgent();
 });
 tasksListsSection.addEventListener('click', function(event) {
+  activateSecondPlusBtn(event);
   changeTaskItemClick(event);
   changeCheckedStatus(event);
   deleteTaskCard(event);
@@ -37,7 +38,6 @@ tasksListsSection.addEventListener('click', function(event) {
   checkIfDeleteIsActive();
   markUrgent(event);
   checkIfUrgent();
-  activateSecondPlusBtn(event);
   addTaskListsToStorage(taskLists);
 });
 
@@ -54,10 +54,10 @@ function activateSecondPlusBtn(event) {
     }
     var targetList = taskLists.find(findList);
     var addTaskBtn = targetCard.querySelector('.add-button-2');
-    // addTaskBtn.disabled = !inputField.value;
     var cardBox = targetCard.querySelector('.card-list-box')
     var listLength = cardBox.childNodes.length - 2;
-    addNewTaskItem(targetCard, targetList, inputField, cardBox, listLength)
+    addNewTaskItem(targetCard, targetList, inputField, cardBox, listLength);
+    inputField.value = '';
   }
 }
 
