@@ -270,6 +270,10 @@ function makeTaskCard(id, title, checklistHTML) {
         <p class="delete">DELETE</p>
       </button>
     </div>
+    <div class="add-task-box">
+      <input class="item-input-2 item-input" type="text" placeholder="add a task">
+      <button class="add-button-2 add-button" type="button">+</button>
+    </div>
   </div>`
   return taskCard;
 }
