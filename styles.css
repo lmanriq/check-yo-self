@@ -23,7 +23,8 @@ header,
 .task-item-wrap,
 .check-pair,
 .task-lists-column,
-.item {
+.item,
+.add-task-box {
   display: flex;
 }
 
@@ -146,7 +147,7 @@ label {
   height: 1.8em;
 }
 
-.item-input {
+.item-input-1 {
   border: none;
   width: 100%;
 }
@@ -179,7 +180,8 @@ h3 {
   width: 15em;
 }
 
-.task-card input {
+.item-inputs,
+.card-title {
   border: none;
   background-color: transparent;
 }
@@ -247,4 +249,15 @@ button.delete {
 .urgent-card,
 .urgent-card .task-list-delete {
   background-color: #ffe89d;
+}
+
+.add-task-box {
+  justify-content: center;
+  margin-bottom: 0.4em;
+}
+
+.item-input-2 {
+  border: 1px solid #1f1f3d;
+  width: 80%;
+  padding-left: 0.3em;
 }
