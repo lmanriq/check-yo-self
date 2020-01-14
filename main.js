@@ -30,12 +30,12 @@ taskListBtn.addEventListener('click', function() {
   checkIfUrgent();
 });
 tasksListsSection.addEventListener('click', function(event) {
-  activateSecondPlusBtn(event);
   changeTaskItemClick(event);
   changeCheckedStatus(event);
   deleteTaskCard(event);
   checkIfChecked();
   checkIfDeleteIsActive();
+  activateSecondPlusBtn(event);
   markUrgent(event);
   checkIfUrgent();
   addTaskListsToStorage(taskLists);
@@ -189,9 +189,9 @@ function checkIfDeleteIsActive() {
   for (var t = 0; t < allTaskCards.length; t++) {
     var allChecked = true;
     var deleteBtn = allTaskCards[t].querySelector('button');
-    var cardList = allTaskCards[t].querySelector('.card-list-box')
-    for (var i = 1; i < cardList.childNodes.length - 1; i++) {
-      if (!cardList.childNodes[i].childNodes[1].checked) {
+    var checkPairs = allTaskCards[t].querySelectorAll('.check-pair');
+    for (var i = 0; i < checkPairs.length; i++) {
+      if (!checkPairs[i].childNodes[1].checked) {
         allChecked = false;
       }
     }
