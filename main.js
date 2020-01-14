@@ -42,8 +42,12 @@ tasksListsSection.addEventListener('click', function(event) {
 });
 
 tasksListsSection.addEventListener('keyup', function() {
-  changeTaskItem(event);
+  changeTaskItemEnter(event);
 });
+
+function activatePlusBtn() {
+  plusBtn.disabled = !taskItemInput.value
+}
 
 function activateSecondPlusBtn(event) {
   var targetCard = event.target.closest('.task-card');
@@ -57,7 +61,16 @@ function activateSecondPlusBtn(event) {
     var cardBox = targetCard.querySelector('.card-list-box')
     var listLength = cardBox.childNodes.length - 2;
     addNewTaskItem(targetCard, targetList, inputField, cardBox, listLength);
-    inputField.value = '';
+  }
+}
+
+function activateUrgentIcon(list, card) {
+  if (list.id == card.id) {
+    var urgentBox = card.querySelector('.urgent-box');
+    urgentBox.innerHTML = `<img class="urgent" src="assets/urgent-active.svg" alt="urgent icon">
+    <p class="urgent">URGENT</p>`
+    urgentBox.classList.add('active');
+    card.classList.add('urgent-card');
   }
 }
 
@@ -72,20 +85,7 @@ function addNewTaskItem(targetCard, targetList, inputField, cardBox, listLength)
     <input id=${newId} class="checkbox" type="checkbox"><input id="${newId}b" class="item-inputs" type="text" value="${newItem}">
   </div>`;
   cardBox.insertAdjacentHTML('beforeend', newHTML);
-}
-
-function activatePlusBtn() {
-  plusBtn.disabled = !taskItemInput.value
-}
-
-function activateUrgentIcon(list, card) {
-  if (list.id == card.id) {
-    var urgentBox = card.querySelector('.urgent-box');
-    urgentBox.innerHTML = `<img class="urgent" src="assets/urgent-active.svg" alt="urgent icon">
-    <p class="urgent">URGENT</p>`
-    urgentBox.classList.add('active');
-    card.classList.add('urgent-card');
-  }
+  inputField.value = '';
 }
 
 function addTaskItem() {
@@ -135,6 +135,35 @@ function changeCheckedStatus(event) {
   }
 }
 
+function changeInputValue(event) {
+  var targetCard = event.target.closest('.task-card');
+  var cardTitle = targetCard.querySelector('.card-title');
+  function findList(list) {
+    return list.id == targetCard.id;
+  }
+  var targetList = taskLists.find(findList);
+  var targetIndex = taskLists.indexOf(targetList);
+  var newTasks = taskLists[targetIndex].tasks;
+  for (var i = 0; i < newTasks.length; i++) {
+    newTasks[i].content = targetCard.querySelector(`[id='${targetList.tasks[i].id}b']`).value
+  }
+  taskLists[targetIndex].updateToDo(cardTitle.value, taskLists[targetIndex].urgent)
+  taskLists[targetIndex].updateTask('', 'content', newTasks)
+  addTaskListsToStorage(taskLists);
+}
+
+function changeTaskItemEnter(event) {
+  if ((event.target.classList.contains('card-title') || event.target.classList.contains('item-inputs')) && event.keyCode === 13) {
+    changeInputValue(event);
+  }
+}
+
+function changeTaskItemClick(event) {
+  if (event.target.tagName !== 'INPUT' && !event.target.classList.contains('delete') && event.target.closest('.task-card')) {
+    changeInputValue(event)
+  }
+}
+
 function checkIfAllChecked(allChecked, btn) {
   if (allChecked) {
     btn.classList.add('active');
@@ -161,9 +190,7 @@ function checkIfDeleteIsActive() {
     var allChecked = true;
     var deleteBtn = allTaskCards[t].querySelector('button');
     var cardList = allTaskCards[t].querySelector('.card-list-box')
-    // first and last nodes are text
     for (var i = 1; i < cardList.childNodes.length - 1; i++) {
-      //Select the checkbox input child node
       if (!cardList.childNodes[i].childNodes[1].checked) {
         allChecked = false;
       }
@@ -269,10 +296,6 @@ function fireOnLoad() {
   checkIfUrgent();
 }
 
-//This is where the list HTML is generated. The console log at the end shows the values that should be displayed, but only the last
-//input displays the change correctly
-//Select by class list instead of input
-//Edit local storage
 function generateChecklistHTML(taskItems) {
   var checklistHTML = '';
   for (var j = 0; j < taskItems.length; j++) {
@@ -318,11 +341,9 @@ function markUrgent(event) {
         taskLists[i].updateToDo(taskLists[i].title, true);
       }
     }
-    // addTaskListsToStorage(taskLists);
   }
 }
 
-//this is where the task cards are created
 function populateCards(taskLists) {
   tasksListsSection.innerHTML = '';
   for (var i = 0; i < taskLists.length; i++) {
@@ -386,33 +407,5 @@ function updateCheckedData(list, task) {
   if (event.target.id === task.id) {
     list.updateTask(event.target.id, 'check');
     event.target.disabled = true;
-  }
-}
-
-function changeInputValue(event) {
-  var targetCard = event.target.closest('.task-card');
-  var cardTitle = targetCard.querySelector('.card-title');
-  function findList(list) {
-    return list.id == targetCard.id;
-  }
-  var targetList = taskLists.find(findList);
-  var targetIndex = taskLists.indexOf(targetList);
-  var newTasks = taskLists[targetIndex].tasks;
-  for (var i = 0; i < newTasks.length; i++) {
-    newTasks[i].content = targetCard.querySelector(`[id='${targetList.tasks[i].id}b']`).value
-  }
-  taskLists[targetIndex].updateToDo(cardTitle.value, taskLists[targetIndex].urgent)
-  taskLists[targetIndex].updateTask('', 'content', newTasks)
-  addTaskListsToStorage(taskLists);
-}
-
-function changeTaskItem(event) {
-  if ((event.target.classList.contains('card-title') || event.target.classList.contains('item-inputs')) && event.keyCode === 13) {
-    changeInputValue(event);
-  }
-}
-function changeTaskItemClick(event) {
-  if (event.target.tagName !== 'INPUT' && !event.target.classList.contains('delete') && event.target.closest('.task-card')) {
-    changeInputValue(event)
   }
 }
