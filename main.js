@@ -40,7 +40,6 @@ tasksListsSection.addEventListener('click', function(event) {
   checkIfUrgent();
   addTaskListsToStorage(taskLists);
 });
-
 tasksListsSection.addEventListener('keyup', function() {
   changeTaskItemEnter(event);
 });
