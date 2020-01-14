@@ -363,8 +363,7 @@ function changeInputValue(event) {
   }
   var targetList = taskLists.find(findList);
   var targetIndex = taskLists.indexOf(targetList);
-  taskLists[targetIndex].title = cardTitle.value;
-  console.log(taskLists[targetIndex].tasks)
+  taskLists[targetIndex].updateToDo(cardTitle.value, taskLists[targetIndex].urgency)
   for (var i = 0; i < targetList.tasks.length; i++) {
     taskLists[targetIndex].tasks[i].content = targetCard.querySelector(`[id='${targetList.tasks[i].id}b']`).value
   }
