@@ -26,7 +26,6 @@ taskItemBox.addEventListener('click', function(event) {
 taskItemInput.addEventListener('keyup', activatePlusBtn);
 taskListBtn.addEventListener('click', function() {
   addTasksToStorage();
-  clearForm();
   checkIfDeleteIsActive();
   checkIfUrgent();
 });
@@ -36,16 +35,32 @@ tasksListsSection.addEventListener('click', function(event) {
   deleteTaskCard(event);
   checkIfChecked();
   checkIfDeleteIsActive();
+  activateSecondPlusBtn(event);
   markUrgent(event);
   checkIfUrgent();
   addTaskListsToStorage(taskLists);
 });
-
-tasksListsSection.addEventListener('keyup', changeTaskItem);
-
+tasksListsSection.addEventListener('keyup', function() {
+  changeTaskItemEnter(event);
+});
 
 function activatePlusBtn() {
   plusBtn.disabled = !taskItemInput.value
+}
+
+function activateSecondPlusBtn(event) {
+  var targetCard = event.target.closest('.task-card');
+  var inputField = targetCard.querySelector('.item-input-2');
+  if (event.target.classList.contains('add-button-2') && inputField.value) {
+    function findList(list) {
+      return list.id == targetCard.id;
+    }
+    var targetList = taskLists.find(findList);
+    var addTaskBtn = targetCard.querySelector('.add-button-2');
+    var cardBox = targetCard.querySelector('.card-list-box')
+    var listLength = cardBox.childNodes.length - 2;
+    addNewTaskItem(targetCard, targetList, inputField, cardBox, listLength);
+  }
 }
 
 function activateUrgentIcon(list, card) {
@@ -56,6 +71,20 @@ function activateUrgentIcon(list, card) {
     urgentBox.classList.add('active');
     card.classList.add('urgent-card');
   }
+}
+
+function addNewTaskItem(targetCard, targetList, inputField, cardBox, listLength) {
+  var newItem = inputField.value;
+  var newId = targetCard.id;
+  for (var i = 0; i <= listLength; i ++) {
+    newId += 'a';
+  }
+  targetList.tasks.push(new Task(newId, newItem, false))
+  var newHTML = `<div class="check-pair">
+    <input id=${newId} class="checkbox" type="checkbox"><input id="${newId}b" class="item-inputs" type="text" value="${newItem}">
+  </div>`;
+  cardBox.insertAdjacentHTML('beforeend', newHTML);
+  inputField.value = '';
 }
 
 function addTaskItem() {
@@ -88,6 +117,7 @@ function addTasksToStorage() {
   })
   var toDo = new ToDoList(id, taskTitleInput.value, false, taskItems);
   toDo.saveToStorage();
+  clearForm();
   addTasksOnLoad();
 }
 
@@ -101,6 +131,35 @@ function changeCheckedStatus(event) {
     targetList.tasks.forEach(function(task) {
       updateCheckedData(targetList, task)
     })
+  }
+}
+
+function changeInputValue(event) {
+  var targetCard = event.target.closest('.task-card');
+  var cardTitle = targetCard.querySelector('.card-title');
+  function findList(list) {
+    return list.id == targetCard.id;
+  }
+  var targetList = taskLists.find(findList);
+  var targetIndex = taskLists.indexOf(targetList);
+  var newTasks = taskLists[targetIndex].tasks;
+  for (var i = 0; i < newTasks.length; i++) {
+    newTasks[i].content = targetCard.querySelector(`[id='${targetList.tasks[i].id}b']`).value
+  }
+  taskLists[targetIndex].updateToDo(cardTitle.value, taskLists[targetIndex].urgent)
+  taskLists[targetIndex].updateTask('', 'content', newTasks)
+  addTaskListsToStorage(taskLists);
+}
+
+function changeTaskItemEnter(event) {
+  if ((event.target.classList.contains('card-title') || event.target.classList.contains('item-inputs')) && event.keyCode === 13) {
+    changeInputValue(event);
+  }
+}
+
+function changeTaskItemClick(event) {
+  if (event.target.tagName !== 'INPUT' && !event.target.classList.contains('delete') && event.target.closest('.task-card')) {
+    changeInputValue(event)
   }
 }
 
@@ -129,11 +188,9 @@ function checkIfDeleteIsActive() {
   for (var t = 0; t < allTaskCards.length; t++) {
     var allChecked = true;
     var deleteBtn = allTaskCards[t].querySelector('button');
-    var cardList = allTaskCards[t].querySelector('.card-list-box')
-    // first and last nodes are text
-    for (var i = 1; i < cardList.childNodes.length - 1; i++) {
-      //Select the checkbox input child node
-      if (!cardList.childNodes[i].childNodes[1].checked) {
+    var checkPairs = allTaskCards[t].querySelectorAll('.check-pair');
+    for (var i = 0; i < checkPairs.length; i++) {
+      if (!checkPairs[i].childNodes[1].checked) {
         allChecked = false;
       }
     }
@@ -238,10 +295,6 @@ function fireOnLoad() {
   checkIfUrgent();
 }
 
-//This is where the list HTML is generated. The console log at the end shows the values that should be displayed, but only the last
-//input displays the change correctly
-//Select by class list instead of input
-//Edit local storage
 function generateChecklistHTML(taskItems) {
   var checklistHTML = '';
   for (var j = 0; j < taskItems.length; j++) {
@@ -270,6 +323,10 @@ function makeTaskCard(id, title, checklistHTML) {
         <p class="delete">DELETE</p>
       </button>
     </div>
+    <div class="add-task-box">
+      <input class="item-input-2 item-input" type="text" placeholder="add a task">
+      <button class="add-button-2 add-button" type="button">+</button>
+    </div>
   </div>`
   return taskCard;
 }
@@ -283,11 +340,9 @@ function markUrgent(event) {
         taskLists[i].updateToDo(taskLists[i].title, true);
       }
     }
-    // addTaskListsToStorage(taskLists);
   }
 }
 
-//this is where the task cards are created
 function populateCards(taskLists) {
   tasksListsSection.innerHTML = '';
   for (var i = 0; i < taskLists.length; i++) {
@@ -351,33 +406,5 @@ function updateCheckedData(list, task) {
   if (event.target.id === task.id) {
     list.updateTask(event.target.id, 'check');
     event.target.disabled = true;
-  }
-}
-
-function changeInputValue(event) {
-  var targetCard = event.target.closest('.task-card');
-  var cardTitle = targetCard.querySelector('.card-title');
-  function findList(list) {
-    return list.id == targetCard.id;
-  }
-  var targetList = taskLists.find(findList);
-  var targetIndex = taskLists.indexOf(targetList);
-  var newTasks = taskLists[targetIndex].tasks;
-  for (var i = 0; i < newTasks.length; i++) {
-    newTasks[i].content = targetCard.querySelector(`[id='${targetList.tasks[i].id}b']`).value
-  }
-  taskLists[targetIndex].updateToDo(cardTitle.value, taskLists[targetIndex].urgent)
-  taskLists[targetIndex].updateTask('', 'content', newTasks)
-  addTaskListsToStorage(taskLists);
-}
-
-function changeTaskItem(event) {
-  if (event.keyCode === 13 && (event.target.classList.contains('card-title') || event.target.classList.contains('item-inputs'))) {
-    changeInputValue(event);
-  }
-}
-function changeTaskItemClick(event) {
-  if (event.target.tagName !== 'INPUT' && !event.target.classList.contains('delete') && event.target.closest('.task-card')) {
-    changeInputValue(event)
   }
 }
