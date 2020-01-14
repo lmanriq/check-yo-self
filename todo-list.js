@@ -34,9 +34,4 @@ class ToDoList {
       }
     }
   }
-
-
-      // else if (this.tasks[i].id === id && change === 'content') {
-      //
-      // }
 }
