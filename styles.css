@@ -182,7 +182,10 @@ h3 {
 .task-card input {
   border: none;
   background-color: transparent;
-  font-size: 0.9em;
+}
+
+.card-title {
+  font-size: 1.2em;
 }
 
 .card-list-box {
@@ -190,16 +193,12 @@ h3 {
   border-top: 2px solid #c7d3d8;
 }
 
-.check-pair p {
-  display: inline-block;
-}
-
-h2,
+.card-title,
 .card-footer {
   padding: 0.5em;
 }
 
-h2 {
+.card-title {
   font-size: 1.2em;
 }
 
@@ -210,6 +209,7 @@ h2 {
 
 .check-pair input {
   margin-right: 1em;
+  font-size: 0.9em;
 }
 
 .card-footer {
