@@ -274,16 +274,6 @@ function enableTaskListBtn() {
   }
 }
 
-function findUrgentLists() {
-  var urgentTaskLists = [];
-  for (var i = 0; i < taskLists.length; i++) {
-    if (taskLists[i].urgent) {
-      urgentTaskLists.push(taskLists[i]);
-    }
-  }
-  return urgentTaskLists;
-}
-
 function filterByUrgency() {
   var urgentTaskLists = findUrgentLists();
   if (!filterBtn.classList.contains('active') && urgentTaskLists.length > 0) {
@@ -296,6 +286,16 @@ function filterByUrgency() {
     populateCards(taskLists);
     filterBtn.classList.remove('active');
   }
+}
+
+function findUrgentLists() {
+  var urgentTaskLists = [];
+  for (var i = 0; i < taskLists.length; i++) {
+    if (taskLists[i].urgent) {
+      urgentTaskLists.push(taskLists[i]);
+    }
+  }
+  return urgentTaskLists;
 }
 
 function fireOnLoad() {
@@ -395,19 +395,6 @@ function searchItems(filteredLists, mainList) {
   })
 }
 
-function searchUrgentTasks() {
-  var searchSelector = document.getElementById('search-selector');
-  var urgentLists = findUrgentLists();
-  if (filterBtn.classList.contains('active') && searchBar.value) {
-    var filteredLists = [];
-    searchLists(filteredLists, urgentLists);
-    searchItems(filteredLists, urgentLists);
-    populateCards(filteredLists);
-  } else if (filterBtn.classList.contains('active') && !searchBar.value) {
-    populateCards(urgentLists);
-  }
-}
-
 function searchTasks() {
   var searchSelector = document.getElementById('search-selector');
   var filteredLists = [];
@@ -423,6 +410,19 @@ function searchTasks() {
     populateCards(filteredLists);
   } else if (!filterBtn.classList.contains('active')) {
     populateCards(taskLists);
+  }
+}
+
+function searchUrgentTasks() {
+  var searchSelector = document.getElementById('search-selector');
+  var urgentLists = findUrgentLists();
+  if (filterBtn.classList.contains('active') && searchBar.value) {
+    var filteredLists = [];
+    searchLists(filteredLists, urgentLists);
+    searchItems(filteredLists, urgentLists);
+    populateCards(filteredLists);
+  } else if (filterBtn.classList.contains('active') && !searchBar.value) {
+    populateCards(urgentLists);
   }
 }
 
