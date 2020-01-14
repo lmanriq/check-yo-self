@@ -396,13 +396,13 @@ function searchItems(filteredLists, mainList) {
 }
 
 function searchUrgentTasks() {
+  var searchSelector = document.getElementById('search-selector');
+  var urgentLists = findUrgentLists();
   if (filterBtn.classList.contains('active') && searchBar.value) {
-    var searchSelector = document.getElementById('search-selector');
-    var urgentLists = findUrgentLists();
     var filteredLists = [];
     searchLists(filteredLists, urgentLists);
     searchItems(filteredLists, urgentLists);
-    populateCards(filteredLists, urgentLists);
+    populateCards(filteredLists);
   } else if (filterBtn.classList.contains('active') && !searchBar.value) {
     populateCards(urgentLists);
   }
