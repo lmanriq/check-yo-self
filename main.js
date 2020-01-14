@@ -390,17 +390,17 @@ function searchItems(filteredLists) {
 function searchTasks() {
   var searchSelector = document.getElementById('search-selector');
   var filteredLists = [];
-  if (searchBar.value && searchSelector.value === 'all') {
+  if (!filterBtn.classList.contains('active') && searchBar.value && searchSelector.value === 'all') {
     searchLists(filteredLists);
     searchItems(filteredLists);
     populateCards(filteredLists);
-  } else if (searchBar.value && searchSelector.value === 'title') {
+  } else if (!filterBtn.classList.contains('active') && searchBar.value && searchSelector.value === 'title') {
     searchLists(filteredLists);
     populateCards(filteredLists);
-  } else if (searchBar.value && searchSelector.value === 'tasks') {
+  } else if (!filterBtn.classList.contains('active') && searchBar.value && searchSelector.value === 'tasks') {
     searchItems(filteredLists);
     populateCards(filteredLists);
-  } else {
+  } else if (!filterBtn.classList.contains('active')) {
     populateCards(taskLists);
   }
 }
