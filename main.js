@@ -235,6 +235,14 @@ function clearForm() {
   disableAllButtons();
 }
 
+function matchCardWithList(targetCard) {
+  function findList(list) {
+    return list.id == targetCard.id;
+  }
+  var targetList = taskLists.find(findList);
+  return targetList;
+}
+
 function deleteTaskCard(event) {
   if (event.target.classList.contains('delete') && !event.target.closest('button').disabled) {
     var targetCard = event.target.closest('.task-card');
