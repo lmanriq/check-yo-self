@@ -70,7 +70,7 @@ function addNewTaskItem(targetCard, targetList, inputField, cardBox, listLength)
   for (var i = 0; i <= listLength; i ++) {
     newId += 'a';
   }
-  
+  targetList.tasks.push(new Task(newId, newItem, false))
   var newHTML = `<div class="check-pair">
     <input id=${newId} class="checkbox" type="checkbox"><input id="${newId}b" class="item-inputs" type="text" value="${newItem}">
   </div>`;
