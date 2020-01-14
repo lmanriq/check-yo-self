@@ -42,20 +42,15 @@ tasksListsSection.addEventListener('click', function(event) {
 });
 
 tasksListsSection.addEventListener('keyup', function() {
-  activateSecondPlusBtn();
-  changeTaskItem();
+  activateSecondPlusBtn(event);
+  changeTaskItem(event);
 });
 
 function activateSecondPlusBtn(event) {
-  if (event.target.classList.includes('.item-input-2')) {
+  if (event.target.classList.contains('item-input-2')) {
     var inputField = event.target;
     var addTaskBtn = inputField.closest('.add-task-box').querySelector('.add-button-2');
-    console.log(inputField.value)
-    if (!inputField.value) {
-      addTaskBtn.disabled = true;
-    } else {
-      addTaskBtn.disabled = true;
-    }
+    addTaskBtn.disabled = !inputField.value;
   }
 }
 
