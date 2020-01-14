@@ -21,11 +21,22 @@ class ToDoList {
     this.urgent = urgency;
   }
 
-  updateTask(id) {
-    for (var i = 0; i < this.tasks.length; i++) {
-      if (this.tasks[i].id === id && this.tasks[i].completed === false) {
-        this.tasks[i].completed = true;
+  updateTask(id, change, newTasks) {
+    if (change === 'check') {
+      for (var i = 0; i < this.tasks.length; i++) {
+        if (this.tasks[i].id === id && this.tasks[i].completed === false) {
+          this.tasks[i].completed = true;
+        }
+      }
+    } else if (change === 'content') {
+      for (var i = 0; i < this.tasks.length; i++) {
+        this.tasks[i].content = newTasks[i].content;
       }
     }
   }
+
+
+      // else if (this.tasks[i].id === id && change === 'content') {
+      //
+      // }
 }
