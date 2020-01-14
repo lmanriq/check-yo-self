@@ -37,7 +37,7 @@ tasksListsSection.addEventListener('click', function(event) {
   checkIfDeleteIsActive();
   markUrgent(event);
   checkIfUrgent();
-  // changeTaskItemClick(event);
+  changeTaskItemClick(event);
   addTaskListsToStorage(taskLists);
 });
 
@@ -355,39 +355,30 @@ function updateCheckedData(list, task) {
   }
 }
 
+function changeInputValue(event) {
+  var targetCard = event.target.closest('.task-card');
+  var cardTitle = targetCard.querySelector('.card-title');
+  function findList(list) {
+    return list.id == targetCard.id;
+  }
+  var targetList = taskLists.find(findList);
+  var targetIndex = taskLists.indexOf(targetList);
+  taskLists[targetIndex].title = cardTitle.value;
+  console.log(taskLists[targetIndex].tasks)
+  for (var i = 0; i < targetList.tasks.length; i++) {
+    taskLists[targetIndex].tasks[i].content = targetCard.querySelector(`[id='${targetList.tasks[i].id}b']`).value
+  }
+  console.log(targetList.tasks);
+  addTaskListsToStorage(taskLists);
+}
 
 function changeTaskItem(event) {
   if (event.keyCode === 13 && (event.target.classList.contains('card-title') || event.target.classList.contains('item-inputs'))) {
-    var targetCard = event.target.closest('.task-card');
-    var cardTitle = targetCard.querySelector('.card-title');
-    function findList(list) {
-      return list.id == targetCard.id;
-    }
-    var targetList = taskLists.find(findList);
-    var targetIndex = taskLists.indexOf(targetList);
-    taskLists[targetIndex].title = cardTitle.value;
-    console.log(taskLists[targetIndex].tasks)
-    for (var i = 0; i < targetList.tasks.length; i++) {
-      taskLists[targetIndex].tasks[i].content = targetCard.querySelector(`[id='${targetList.tasks[i].id}b']`).value
-    }
-    console.log(targetList.tasks);
-    addTaskListsToStorage(taskLists);
+    changeInputValue(event);
   }
 }
-//this works on the last item in the list only
-//all of the task contents are saved in local storage and parsed correctly, but only the last item of any list saves its new content for some reason
-// function changeTaskItemClick(event) {
-//   if (event.target.tagName !== 'INPUT' && event.target.tagName !== 'BUTTON' && event.target.closest('.task-card')) {
-//     var targetCard = event.target.closest('.task-card');
-//     function findList(list) {
-//       return list.id == targetCard.id;
-//     }
-//     var targetList = taskLists.find(findList);
-//     // var targetIndex = taskLists.indexOf(targetList);
-//     console.log(targetIndex);
-//     for (var i = 0; i < targetList.tasks.length; i++) {
-//       targetList.tasks[i].content = targetCard.querySelector(`[id='${targetList.tasks[i].id}b']`).value
-//     }
-//     // taskLists.splice(targetIndex, 1, targetList);
-//   }
-// }
+function changeTaskItemClick(event) {
+  if (event.target.tagName !== 'INPUT' && event.target.tagName !== 'BUTTON' && event.target.closest('.task-card')) {
+    changeInputValue(event)
+  }
+}
