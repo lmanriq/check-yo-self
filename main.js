@@ -55,10 +55,7 @@ function activateSecondPlusBtn(event) {
   var targetCard = event.target.closest('.task-card');
   var inputField = targetCard.querySelector('.item-input-2');
   if (event.target.classList.contains('add-button-2') && inputField.value) {
-    function findList(list) {
-      return list.id == targetCard.id;
-    }
-    var targetList = taskLists.find(findList);
+    var targetList = matchCardWithList(targetCard);
     var addTaskBtn = targetCard.querySelector('.add-button-2');
     var cardBox = targetCard.querySelector('.card-list-box')
     var listLength = cardBox.childNodes.length - 2;
@@ -127,10 +124,7 @@ function addTasksToStorage() {
 function changeCheckedStatus(event) {
   if (event.target.classList.contains('checkbox')) {
     var targetCard = event.target.closest('.task-card');
-    function findList(list) {
-      return list.id == targetCard.id;
-    }
-    var targetList = taskLists.find(findList);
+    var targetList = matchCardWithList(targetCard);
     targetList.tasks.forEach(function(task) {
       updateCheckedData(targetList, task)
     })
@@ -140,10 +134,7 @@ function changeCheckedStatus(event) {
 function changeInputValue(event) {
   var targetCard = event.target.closest('.task-card');
   var cardTitle = targetCard.querySelector('.card-title');
-  function findList(list) {
-    return list.id == targetCard.id;
-  }
-  var targetList = taskLists.find(findList);
+  var targetList = matchCardWithList(targetCard);
   var targetIndex = taskLists.indexOf(targetList);
   var newTasks = taskLists[targetIndex].tasks;
   for (var i = 0; i < newTasks.length; i++) {
@@ -238,10 +229,7 @@ function clearForm() {
 function deleteTaskCard(event) {
   if (event.target.classList.contains('delete') && !event.target.closest('button').disabled) {
     var targetCard = event.target.closest('.task-card');
-    function findList(list) {
-      return list.id == targetCard.id;
-    }
-    var targetList = taskLists.find(findList);
+    var targetList = matchCardWithList(targetCard);
     targetCard.remove();
     targetList.deleteFromStorage();
   }
@@ -352,6 +340,14 @@ function markUrgent(event) {
       }
     }
   }
+}
+
+function matchCardWithList(targetCard) {
+  function findList(list) {
+    return list.id == targetCard.id;
+  }
+  var targetList = taskLists.find(findList);
+  return targetList;
 }
 
 function populateCards(taskLists) {
