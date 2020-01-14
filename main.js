@@ -31,13 +31,13 @@ taskListBtn.addEventListener('click', function() {
   checkIfUrgent();
 });
 tasksListsSection.addEventListener('click', function(event) {
+  changeTaskItemClick(event);
   changeCheckedStatus(event);
   deleteTaskCard(event);
   checkIfChecked();
   checkIfDeleteIsActive();
   markUrgent(event);
   checkIfUrgent();
-  changeTaskItemClick(event);
   addTaskListsToStorage(taskLists);
 });
 
@@ -367,7 +367,7 @@ function changeInputValue(event) {
   for (var i = 0; i < newTasks.length; i++) {
     newTasks[i].content = targetCard.querySelector(`[id='${targetList.tasks[i].id}b']`).value
   }
-  taskLists[targetIndex].updateToDo(cardTitle.value, taskLists[targetIndex].urgency)
+  taskLists[targetIndex].updateToDo(cardTitle.value, taskLists[targetIndex].urgent)
   taskLists[targetIndex].updateTask('', 'content', newTasks)
   addTaskListsToStorage(taskLists);
 }
