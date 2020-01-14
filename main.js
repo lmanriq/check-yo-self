@@ -274,16 +274,6 @@ function enableTaskListBtn() {
   }
 }
 
-function findUrgentLists() {
-  var urgentTaskLists = [];
-  for (var i = 0; i < taskLists.length; i++) {
-    if (taskLists[i].urgent) {
-      urgentTaskLists.push(taskLists[i]);
-    }
-  }
-  return urgentTaskLists;
-}
-
 function filterByUrgency() {
   var urgentTaskLists = findUrgentLists();
   if (!filterBtn.classList.contains('active') && urgentTaskLists.length > 0) {
@@ -296,6 +286,16 @@ function filterByUrgency() {
     populateCards(taskLists);
     filterBtn.classList.remove('active');
   }
+}
+
+function findUrgentLists() {
+  var urgentTaskLists = [];
+  for (var i = 0; i < taskLists.length; i++) {
+    if (taskLists[i].urgent) {
+      urgentTaskLists.push(taskLists[i]);
+    }
+  }
+  return urgentTaskLists;
 }
 
 function fireOnLoad() {
