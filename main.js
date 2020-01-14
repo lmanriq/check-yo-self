@@ -46,13 +46,13 @@ tasksListsSection.addEventListener('keyup', function() {
 });
 
 function activateSecondPlusBtn(event) {
-  if (event.target.classList.contains('add-button-2')) {
-    var targetCard = event.target.closest('.task-card');
+  var targetCard = event.target.closest('.task-card');
+  var inputField = targetCard.querySelector('.item-input-2');
+  if (event.target.classList.contains('add-button-2') && inputField.value) {
     function findList(list) {
       return list.id == targetCard.id;
     }
     var targetList = taskLists.find(findList);
-    var inputField = targetCard.querySelector('.item-input-2')
     var addTaskBtn = targetCard.querySelector('.add-button-2');
     // addTaskBtn.disabled = !inputField.value;
     var cardBox = targetCard.querySelector('.card-list-box')
