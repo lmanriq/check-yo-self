@@ -250,7 +250,6 @@ function generateChecklistHTML(taskItems) {
     checklistHTML += `<div class="check-pair">
       <input id=${taskItems[j].id} class="checkbox" type="checkbox" ${checkedStatus}><input id="${taskItems[j].id}b" class="item-inputs" type="text" value="${taskItems[j].content}">
     </div>`;
-    console.log(taskItems[j].content)
   }
   return checklistHTML;
 }
