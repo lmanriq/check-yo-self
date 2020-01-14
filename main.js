@@ -350,7 +350,7 @@ function searchTasks() {
 
 function updateCheckedData(list, task) {
   if (event.target.id === task.id) {
-    list.updateTask(event.target.id);
+    list.updateTask(event.target.id, 'check');
     event.target.disabled = true;
   }
 }
@@ -363,11 +363,12 @@ function changeInputValue(event) {
   }
   var targetList = taskLists.find(findList);
   var targetIndex = taskLists.indexOf(targetList);
-  taskLists[targetIndex].updateToDo(cardTitle.value, taskLists[targetIndex].urgency)
-  for (var i = 0; i < targetList.tasks.length; i++) {
-    taskLists[targetIndex].tasks[i].content = targetCard.querySelector(`[id='${targetList.tasks[i].id}b']`).value
+  var newTasks = taskLists[targetIndex].tasks;
+  for (var i = 0; i < newTasks.length; i++) {
+    newTasks[i].content = targetCard.querySelector(`[id='${targetList.tasks[i].id}b']`).value
   }
-  console.log(targetList.tasks);
+  taskLists[targetIndex].updateToDo(cardTitle.value, taskLists[targetIndex].urgency)
+  taskLists[targetIndex].updateTask('', 'content', newTasks)
   addTaskListsToStorage(taskLists);
 }
 
@@ -377,7 +378,7 @@ function changeTaskItem(event) {
   }
 }
 function changeTaskItemClick(event) {
-  if (event.target.tagName !== 'INPUT' && event.target.tagName !== 'BUTTON' && event.target.closest('.task-card')) {
+  if (event.target.tagName !== 'INPUT' && !event.target.classList.contains('delete') && event.target.closest('.task-card')) {
     changeInputValue(event)
   }
 }
