@@ -41,8 +41,23 @@ tasksListsSection.addEventListener('click', function(event) {
   addTaskListsToStorage(taskLists);
 });
 
-tasksListsSection.addEventListener('keyup', changeTaskItem);
+tasksListsSection.addEventListener('keyup', function() {
+  activateSecondPlusBtn();
+  changeTaskItem();
+});
 
+function activateSecondPlusBtn(event) {
+  if (event.target.classList.includes('.item-input-2')) {
+    var inputField = event.target;
+    var addTaskBtn = inputField.closest('.add-task-box').querySelector('.add-button-2');
+    console.log(inputField.value)
+    if (!inputField.value) {
+      addTaskBtn.disabled = true;
+    } else {
+      addTaskBtn.disabled = true;
+    }
+  }
+}
 
 function activatePlusBtn() {
   plusBtn.disabled = !taskItemInput.value
@@ -376,7 +391,7 @@ function changeInputValue(event) {
 }
 
 function changeTaskItem(event) {
-  if (event.keyCode === 13 && (event.target.classList.contains('card-title') || event.target.classList.contains('item-inputs'))) {
+  if ((event.target.classList.contains('card-title') || event.target.classList.contains('item-inputs')) && event.keyCode === 13) {
     changeInputValue(event);
   }
 }
