@@ -26,7 +26,6 @@ taskItemBox.addEventListener('click', function(event) {
 taskItemInput.addEventListener('keyup', activatePlusBtn);
 taskListBtn.addEventListener('click', function() {
   addTasksToStorage();
-  clearForm();
   checkIfDeleteIsActive();
   checkIfUrgent();
 });
@@ -38,15 +37,13 @@ tasksListsSection.addEventListener('click', function(event) {
   checkIfDeleteIsActive();
   markUrgent(event);
   checkIfUrgent();
+  activateSecondPlusBtn(event);
   addTaskListsToStorage(taskLists);
 });
 
 tasksListsSection.addEventListener('keyup', function() {
   changeTaskItem(event);
 });
-tasksListsSection.addEventListener('click', function(event) {
-  activateSecondPlusBtn(event);
-})
 
 function activateSecondPlusBtn(event) {
   if (event.target.classList.contains('add-button-2')) {
@@ -121,6 +118,7 @@ function addTasksToStorage() {
   })
   var toDo = new ToDoList(id, taskTitleInput.value, false, taskItems);
   toDo.saveToStorage();
+  clearForm();
   addTasksOnLoad();
 }
 
