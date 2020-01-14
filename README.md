@@ -36,9 +36,9 @@ I had some exposure to and experience with the high level topics covered.
 Reflections:
 - For my partner projects, we completed everything side by side, so there were no aspects of the functionality
 that I didn't fully understand. My study habits early on in the mod made this project relatively lacking in stress.
-- I am now able to work through large chunks of functionality without needing as many internet references or questions answer from mentors. 
+- I am now able to work through large chunks of functionality without needing as many internet references or questions answer from mentors.
 
 ## Screenshots of comp and your app
 
 ![Comp Screenshot](assets/check-yo-self-comp.jpg)
-![Final Screenshot](assets/check-yo-self-final.png)
+![Final Screenshot](assets/cys-final-plus-extensions.png)
