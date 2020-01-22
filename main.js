@@ -8,7 +8,7 @@ var taskItemInput = document.getElementById('task-item-input');
 var taskListBtn = document.getElementById('make-task-list-btn');
 var taskLists = [];
 var tasksListsSection = document.querySelector('.task-lists-column');
-var taskTitleInput = document.getElementById('task-title-input')
+var taskTitleInput = document.getElementById('task-title-input');
 
 fireOnLoad();
 
@@ -17,22 +17,22 @@ filterBtn.addEventListener('click', filterByUrgency);
 plusBtn.addEventListener('click', function() {
   addTaskItem();
   enableTaskListBtn();
-});
+})
 searchBar.addEventListener('keyup', function() {
   searchTasks();
   searchUrgentTasks();
-});
+})
 taskForm.addEventListener('keyup', enableClearBtn);
 taskItemBox.addEventListener('click', function(event) {
   deleteTaskItem(event);
-});
+})
 taskItemInput.addEventListener('keyup', activatePlusBtn);
 taskListBtn.addEventListener('click', function() {
   addTasksToStorage();
   checkIfDeleteIsActive();
   checkIfUrgent();
-});
-tasksListsSection.addEventListener('click', function(event) {
+})
+tasksListsSection.addEventListener('click', function (event) {
   changeTaskItemClick(event);
   changeCheckedStatus(event);
   deleteTaskCard(event);
@@ -42,7 +42,7 @@ tasksListsSection.addEventListener('click', function(event) {
   markUrgent(event);
   checkIfUrgent();
   addTaskListsToStorage(taskLists);
-});
+})
 tasksListsSection.addEventListener('keyup', function() {
   changeTaskItemEnter(event);
 });
@@ -56,7 +56,6 @@ function activateSecondPlusBtn(event) {
   var inputField = targetCard.querySelector('.item-input-2');
   if (event.target.classList.contains('add-button-2') && inputField.value) {
     var targetList = matchCardWithList(targetCard);
-    var addTaskBtn = targetCard.querySelector('.add-button-2');
     var cardBox = targetCard.querySelector('.card-list-box')
     var listLength = cardBox.childNodes.length - 2;
     addNewTaskItem(targetCard, targetList, inputField, cardBox, listLength);
@@ -66,30 +65,33 @@ function activateSecondPlusBtn(event) {
 function activateUrgentIcon(list, card) {
   if (list.id == card.id) {
     var urgentBox = card.querySelector('.urgent-box');
-    urgentBox.innerHTML = `<img class="urgent" src="assets/urgent-active.svg" alt="urgent icon">
+    urgentBox.innerHTML = `<img class="urgent" src="assets/urgent-active.svg"
+    alt="urgent icon">
     <p class="urgent">URGENT</p>`
     urgentBox.classList.add('active');
     card.classList.add('urgent-card');
   }
 }
 
-function addNewTaskItem(targetCard, targetList, inputField, cardBox, listLength) {
-  var newItem = inputField.value;
+function addNewTaskItem(targetCard, targetList, input, cardBox, listLength) {
+  var newItem = input.value;
   var newId = targetCard.id;
   for (var i = 0; i <= listLength; i ++) {
     newId += 'a';
   }
   targetList.tasks.push(new Task(newId, newItem, false))
   var newHTML = `<div class="check-pair">
-    <input id=${newId} class="checkbox" type="checkbox"><input id="${newId}b" class="item-inputs" type="text" value="${newItem}">
+    <input id=${newId} class="checkbox" type="checkbox"><input id="${newId}b"
+    class="item-inputs" type="text" value="${newItem}">
   </div>`;
   cardBox.insertAdjacentHTML('beforeend', newHTML);
-  inputField.value = '';
+  input.value = '';
 }
 
 function addTaskItem() {
   var taskItemHTML = `<div class="item">
-    <img class="delete" src="assets/delete.svg" alt="delete icon"><p class="task-p">${taskItemInput.value}</p>
+    <img class="delete" src="assets/delete.svg" alt="delete icon">
+    <p class="task-p">${taskItemInput.value}</p>
   </div>`
   taskItemBox.insertAdjacentHTML('beforeend', taskItemHTML);
   taskItemInput.value = '';
@@ -101,7 +103,8 @@ function addTaskListsToStorage(taskLists) {
 }
 
 function addTasksOnLoad() {
-  if (localStorage.getItem('task lists') !== '[]' && localStorage.getItem('task lists') !== null) {
+  if (localStorage.getItem('task lists') !== '[]' &&
+  localStorage.getItem('task lists') !== null) {
     populateCards(taskLists);
   }
 }
@@ -111,7 +114,7 @@ function addTasksToStorage() {
   var allTasks = document.querySelectorAll('.task-p');
   var id = new Date().valueOf();
   var taskId = id;
-  allTasks.forEach(function(task){
+  allTasks.forEach(function(task) {
     taskId += 'a';
     taskItems.push(new Task(taskId, task.innerText, false));
   })
@@ -135,24 +138,27 @@ function changeInputValue(event) {
   var targetCard = event.target.closest('.task-card');
   var cardTitle = targetCard.querySelector('.card-title');
   var targetList = matchCardWithList(targetCard);
-  var targetIndex = taskLists.indexOf(targetList);
-  var newTasks = taskLists[targetIndex].tasks;
+  var newTasks = targetList.tasks;
   for (var i = 0; i < newTasks.length; i++) {
-    newTasks[i].content = targetCard.querySelector(`[id='${targetList.tasks[i].id}b']`).value
+    newTasks[i].content =
+    targetCard.querySelector(`[id='${targetList.tasks[i].id}b']`).value
   }
-  taskLists[targetIndex].updateToDo(cardTitle.value, taskLists[targetIndex].urgent)
-  taskLists[targetIndex].updateTask('', 'content', newTasks)
+  targetList.updateToDo(cardTitle.value, targetList.urgent)
+  targetList.updateTask('', 'content', newTasks)
   addTaskListsToStorage(taskLists);
 }
 
 function changeTaskItemEnter(event) {
-  if ((event.target.classList.contains('card-title') || event.target.classList.contains('item-inputs')) && event.keyCode === 13) {
+  if ((event.target.classList.contains('card-title') ||
+  event.target.classList.contains('item-inputs')) && event.keyCode === 13) {
     changeInputValue(event);
   }
 }
 
 function changeTaskItemClick(event) {
-  if (event.target.tagName !== 'INPUT' && !event.target.classList.contains('delete') && event.target.closest('.task-card')) {
+  if (event.target.tagName !== 'INPUT' &&
+  !event.target.classList.contains('delete')
+  && event.target.closest('.task-card')) {
     changeInputValue(event)
   }
 }
@@ -160,11 +166,13 @@ function changeTaskItemClick(event) {
 function checkIfAllChecked(allChecked, btn) {
   if (allChecked) {
     btn.classList.add('active');
-    btn.innerHTML = `<img class="delete delete-img" src="assets/delete-active.svg" alt="delete button">
+    btn.innerHTML = `<img class="delete delete-img"
+    src="assets/delete-active.svg" alt="delete button">
     <p class="delete">DELETE</p>`
   } else {
     btn.classList.remove('active');
-    btn.innerHTML = `<img class="delete delete-img" src="assets/delete.svg" alt="delete button">
+    btn.innerHTML = `<img class="delete delete-img" src="assets/delete.svg"
+    alt="delete button">
     <p class="delete">DELETE</p>`
   }
   btn.disabled = !allChecked;
@@ -194,7 +202,8 @@ function checkIfDeleteIsActive() {
 
 function checkIfNoMoreCards() {
   if (!tasksListsSection.innerHTML) {
-    tasksListsSection.innerHTML = `<h3 id="no-tasks-msg">No tasks yet! Create a new task list to get started.</h3>`
+    tasksListsSection.innerHTML = `<h3 id="no-tasks-msg">No tasks yet!
+    Create a new task list to get started.</h3>`
   }
 }
 
@@ -211,12 +220,13 @@ function checkIfUrgent() {
 
 function checkStorage() {
   var noTasksMsg = document.getElementById('no-tasks-msg');
-  if (localStorage.getItem('task lists') !== '[]' && localStorage.getItem('task lists') !== null) {
+  if (localStorage.getItem('task lists') !== '[]' &&
+  localStorage.getItem('task lists') !== null) {
     noTasksMsg.remove();
     taskLists = JSON.parse(localStorage.getItem('task lists'));
-    for (var g = 0; g < taskLists.length; g++) {
-      taskLists[g] = new ToDoList(taskLists[g].id, taskLists[g].title, taskLists[g].urgent, taskLists[g].tasks);
-    }
+    taskLists = taskLists.map(task => {
+      return task = new ToDoList(task.id, task.title, task.urgent, task.tasks);
+    })
   }
 }
 
@@ -227,7 +237,8 @@ function clearForm() {
 }
 
 function deleteTaskCard(event) {
-  if (event.target.classList.contains('delete') && !event.target.closest('button').disabled) {
+  if (event.target.classList.contains('delete') &&
+  !event.target.closest('button').disabled) {
     var targetCard = event.target.closest('.task-card');
     var targetList = matchCardWithList(targetCard);
     targetCard.remove();
@@ -267,7 +278,8 @@ function filterByUrgency() {
   if (!filterBtn.classList.contains('active') && urgentTaskLists.length > 0) {
     populateCards(urgentTaskLists);
     filterBtn.classList.add('active');
-  } else if (!filterBtn.classList.contains('active') && urgentTaskLists.length === 0) {
+  } else if (!filterBtn.classList.contains('active')
+    && urgentTaskLists.length === 0) {
     tasksListsSection.innerHTML = `<h3>No urgent tasks yet!</h3>`
     filterBtn.classList.add('active');
   } else {
@@ -296,13 +308,17 @@ function fireOnLoad() {
 
 function generateChecklistHTML(taskItems) {
   var checklistHTML = '';
-  for (var j = 0; j < taskItems.length; j++) {
-    taskItems[j] = new Task(taskItems[j].id, taskItems[j].content, taskItems[j].completed);
-    var checkedStatus = taskItems[j].completed ? `checked="checked"` : '';
+  taskItems = taskItems.map(item => {
+    return item = new Task(item.id, item.content, item.completed);
+  })
+  taskItems.forEach(item => {
+    let checkedStatus = item.completed ? `checked="checked"` : '';
     checklistHTML += `<div class="check-pair">
-      <input id=${taskItems[j].id} class="checkbox" type="checkbox" ${checkedStatus}><input id="${taskItems[j].id}b" class="item-inputs" type="text" value="${taskItems[j].content}">
+      <input id=${item.id} class="checkbox" type="checkbox" ${checkedStatus}>
+      <input id="${item.id}b" class="item-inputs" type="text"
+      value="${item.content}">
     </div>`;
-  }
+  })
   return checklistHTML;
 }
 
@@ -318,12 +334,14 @@ function makeTaskCard(id, title, checklistHTML) {
         <p class="urgent">URGENT</p>
       </div>
       <button class="delete task-list-delete">
-        <img class="delete delete-img" src="assets/delete.svg" alt="delete button">
+        <img class="delete delete-img" src="assets/delete.svg"
+        alt="delete button">
         <p class="delete">DELETE</p>
       </button>
     </div>
     <div class="add-task-box">
-      <input class="item-input-2 item-input" type="text" placeholder="add a task">
+      <input class="item-input-2 item-input" type="text"
+      placeholder="add a task">
       <button class="add-button-2 add-button" type="button">+</button>
     </div>
   </div>`
@@ -331,7 +349,8 @@ function makeTaskCard(id, title, checklistHTML) {
 }
 
 function markUrgent(event) {
-  if (event.target.classList.contains('urgent') && !event.target.classList.contains('active')) {
+  if (event.target.classList.contains('urgent') &&
+  !event.target.classList.contains('active')) {
     event.target.classList.add('active');
     var targetCard = event.target.closest('.task-card');
     for (var i = 0; i < taskLists.length; i++) {
@@ -352,27 +371,21 @@ function matchCardWithList(targetCard) {
 
 function populateCards(taskLists) {
   tasksListsSection.innerHTML = '';
-  for (var i = 0; i < taskLists.length; i++) {
-    var taskItems = taskLists[i].tasks;
-    var checklistHTML = generateChecklistHTML(taskItems);
-    var taskCard = makeTaskCard(taskLists[i].id, taskLists[i].title, checklistHTML);
+  taskLists.forEach(list => {
+    let taskItems = list.tasks;
+    let checklistHTML = generateChecklistHTML(taskItems);
+    let taskCard = makeTaskCard(list.id, list.title, checklistHTML);
     tasksListsSection.insertAdjacentHTML('afterbegin', taskCard);
     checkIfChecked();
     checkIfUrgent();
     checkIfDeleteIsActive();
-  }
-}
-
-function removeAllCards() {
-  var allCards = document.querySelectorAll('.task-card');
-  allCards.forEach(function(card) {
-    card.remove();
   })
 }
 
 function searchPartialString(zone, list, filteredLists) {
   var searchTerm = searchBar.value;
-  if (searchTerm === zone.slice(0, searchTerm.length) && filteredLists.indexOf(list) === -1) {
+  if (searchTerm === zone.slice(0, searchTerm.length)
+  && filteredLists.indexOf(list) === -1) {
     filteredLists.push(list);
   }
 }
@@ -394,14 +407,17 @@ function searchItems(filteredLists, mainList) {
 function searchTasks() {
   var searchSelector = document.getElementById('search-selector');
   var filteredLists = [];
-  if (!filterBtn.classList.contains('active') && searchBar.value && searchSelector.value === 'all') {
+  if (!filterBtn.classList.contains('active') && searchBar.value
+  && searchSelector.value === 'all') {
     searchLists(filteredLists, taskLists);
     searchItems(filteredLists, taskLists);
     populateCards(filteredLists);
-  } else if (!filterBtn.classList.contains('active') && searchBar.value && searchSelector.value === 'title') {
+  } else if (!filterBtn.classList.contains('active') && searchBar.value
+  && searchSelector.value === 'title') {
     searchLists(filteredLists, taskLists);
     populateCards(filteredLists);
-  } else if (!filterBtn.classList.contains('active') && searchBar.value && searchSelector.value === 'tasks') {
+  } else if (!filterBtn.classList.contains('active') && searchBar.value
+  && searchSelector.value === 'tasks') {
     searchItems(filteredLists, taskLists);
     populateCards(filteredLists);
   } else if (!filterBtn.classList.contains('active')) {
