@@ -63,7 +63,7 @@ function activateSecondPlusBtn(event) {
 }
 
 function activateUrgentIcon(list, card) {
-  if (list.id == card.id) {
+  if (list.id === parseInt(card.id)) {
     var urgentBox = card.querySelector('.urgent-box');
     urgentBox.innerHTML = `<img class="urgent" src="assets/urgent-active.svg"
     alt="urgent icon">
@@ -139,10 +139,9 @@ function changeInputValue(event) {
   var cardTitle = targetCard.querySelector('.card-title');
   var targetList = matchCardWithList(targetCard);
   var newTasks = targetList.tasks;
-  for (var i = 0; i < newTasks.length; i++) {
-    newTasks[i].content =
-    targetCard.querySelector(`[id='${targetList.tasks[i].id}b']`).value
-  }
+  newTasks.map(task => {
+    task.content = targetCard.querySelector(`[id='${task.id}b']`).value
+  })
   targetList.updateToDo(cardTitle.value, targetList.urgent)
   targetList.updateTask('', 'content', newTasks)
   addTaskListsToStorage(taskLists);
@@ -186,18 +185,18 @@ function checkIfChecked() {
 }
 
 function checkIfDeleteIsActive() {
-  var allTaskCards = document.querySelectorAll('.task-card');
-  for (var t = 0; t < allTaskCards.length; t++) {
-    var allChecked = true;
-    var deleteBtn = allTaskCards[t].querySelector('button');
-    var checkPairs = allTaskCards[t].querySelectorAll('.check-pair');
-    for (var i = 0; i < checkPairs.length; i++) {
-      if (!checkPairs[i].childNodes[1].checked) {
+  const allTaskCards = document.querySelectorAll('.task-card');
+  allTaskCards.forEach(card => {
+    let allChecked = true;
+    const deleteBtn = card.querySelector('button');
+    const checkPairs = card.querySelectorAll('.check-pair');
+    checkPairs.forEach(pair => {
+      if (!pair.childNodes[1].checked) {
         allChecked = false;
       }
-    }
+    })
     checkIfAllChecked(allChecked, deleteBtn);
-  }
+  })
 }
 
 function checkIfNoMoreCards() {
@@ -208,14 +207,14 @@ function checkIfNoMoreCards() {
 }
 
 function checkIfUrgent() {
-  for (var i = 0; i < taskLists.length; i++) {
-    if (taskLists[i].urgent) {
-      var allTaskCards = document.querySelectorAll('.task-card');
-      for (var j = 0; j < allTaskCards.length; j++) {
-        activateUrgentIcon(taskLists[i], allTaskCards[j]);
-      }
+  taskLists.forEach(list => {
+    if (list.urgent) {
+      let allTaskCards = document.querySelectorAll('.task-card');
+      allTaskCards.forEach(card => {
+        activateUrgentIcon(list, card)
+      })
     }
-  }
+  })
 }
 
 function checkStorage() {
@@ -289,12 +288,7 @@ function filterByUrgency() {
 }
 
 function findUrgentLists() {
-  var urgentTaskLists = [];
-  for (var i = 0; i < taskLists.length; i++) {
-    if (taskLists[i].urgent) {
-      urgentTaskLists.push(taskLists[i]);
-    }
-  }
+  let urgentTaskLists = taskLists.filter(list => list.urgent)
   return urgentTaskLists;
 }
 
@@ -353,17 +347,17 @@ function markUrgent(event) {
   !event.target.classList.contains('active')) {
     event.target.classList.add('active');
     var targetCard = event.target.closest('.task-card');
-    for (var i = 0; i < taskLists.length; i++) {
-      if (taskLists[i].id == targetCard.id) {
-        taskLists[i].updateToDo(taskLists[i].title, true);
+    taskLists.forEach(list => {
+      if (list.id === parseInt(targetCard.id)) {
+        list.updateToDo(list.title, true);
       }
-    }
+    })
   }
 }
 
 function matchCardWithList(targetCard) {
   function findList(list) {
-    return list.id == targetCard.id;
+    return list.id === parseInt(targetCard.id);
   }
   var targetList = taskLists.find(findList);
   return targetList;
@@ -407,20 +401,23 @@ function searchItems(filteredLists, mainList) {
 function searchTasks() {
   var searchSelector = document.getElementById('search-selector');
   var filteredLists = [];
-  if (!filterBtn.classList.contains('active') && searchBar.value
-  && searchSelector.value === 'all') {
-    searchLists(filteredLists, taskLists);
-    searchItems(filteredLists, taskLists);
-    populateCards(filteredLists);
-  } else if (!filterBtn.classList.contains('active') && searchBar.value
-  && searchSelector.value === 'title') {
-    searchLists(filteredLists, taskLists);
-    populateCards(filteredLists);
-  } else if (!filterBtn.classList.contains('active') && searchBar.value
-  && searchSelector.value === 'tasks') {
-    searchItems(filteredLists, taskLists);
-    populateCards(filteredLists);
-  } else if (!filterBtn.classList.contains('active')) {
+  if (!filterBtn.classList.contains('active') && searchBar.value) {
+    switch (searchSelector.value) {
+    case 'all':
+      searchLists(filteredLists, taskLists);
+      searchItems(filteredLists, taskLists);
+      populateCards(filteredLists);
+      break;
+    case 'title':
+      searchLists(filteredLists, taskLists);
+      populateCards(filteredLists);
+      break;
+    case 'tasks':
+      searchItems(filteredLists, taskLists);
+      populateCards(filteredLists);
+      break;
+    }
+  } else {
     populateCards(taskLists);
   }
 }
